@@ -2,8 +2,9 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 import { useMap } from 'react-map-gl/maplibre'
 import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
+import '../App.css'
 
-const GeoControl = (setViewState, setMarker) => {
+const GeoControl = () => {
   const { current: map } = useMap()
 
   const geocoderApi = {
@@ -38,10 +39,27 @@ const GeoControl = (setViewState, setMarker) => {
 
   useEffect(() => {
     if (map) {
-      // Initialize the geocoder and attach it to the map
-      const geocoder = new MaplibreGeocoder(geocoderApi, {
-        maplibregl,
-      })
+      const geocoderOptions = {
+        maplibregl: maplibregl,
+        placeholder: 'Search for a location...',
+        limit: 5,
+        showResultMarkers: true,
+        collapsed: true,
+        minLength: 5,
+        popup: true,
+        popupRender: (item) => {
+          // Customize your HTML here
+          return `
+            <div class="popup" style="padding: 10px;">
+              <h4>${item.place_name}</h4>
+            
+            </div>
+          `
+        },
+        zoom: 10,
+      }
+
+      const geocoder = new MaplibreGeocoder(geocoderApi, geocoderOptions)
       map.addControl(geocoder)
 
       return () => {

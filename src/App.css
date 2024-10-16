@@ -17,3 +17,22 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.popup {
+  color: black;
+}
+
+.maplibregl-popup .maplibregl-popup-content .maplibregl-popup-close-button {
+  background-color: #6d6d6d; /* Change the background color */
+  border: none; /* Remove any borders */
+  color: white; /* Change text color */
+  padding: 0.3rem 1rem 0.3rem 1rem; /* Add some padding */
+  border-radius: 10%; /* Make it round */
+  cursor: pointer; /* Change the cursor to a pointer */
+}
+
+.maplibregl-popup
+  .maplibregl-popup-content
+  .maplibregl-popup-close-button:hover {
+  background-color: #5c5c5c; /* Darker shade on hover */
+}
