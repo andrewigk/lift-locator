@@ -1,18 +1,30 @@
 import './App.css'
-import Map from 'react-map-gl/maplibre'
+import Map from './components/Map.jsx'
+import NavBar from './components/NavBar.jsx'
+
+import { useState } from 'react'
 
 function App() {
+  const [viewState, setViewState] = useState({
+    longitude: -106.4,
+    latitude: 56.1,
+    zoom: 2.5,
+  })
+
+  const [marker, setMarker] = useState({
+    markerLongitude: 100,
+    markerLatitude: 50,
+  })
   return (
     <>
+      <NavBar></NavBar>
       <Map
-        initialViewState={{
-          longitude: -122.4,
-          latitude: 37.8,
-          zoom: 14,
-        }}
-        style={{ width: 600, height: 400 }}
-        mapStyle="https://api.maptiler.com/maps/streets-v2/style.json?key=mkGy6FQXu312U1OML8Uz"
-      />
+        viewState={viewState}
+        setViewState={setViewState}
+        marker={marker}
+        setMarker={setMarker}
+        onMove={(evt) => setViewState(evt.viewState)}
+      ></Map>
     </>
   )
 }
