@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 import { useMap } from 'react-map-gl/maplibre'
 import { useEffect } from 'react'
@@ -42,7 +43,8 @@ const GeoControl = () => {
       const geocoderOptions = {
         maplibregl: maplibregl,
         placeholder: 'Search for a location...',
-        limit: 5,
+        limit: 10,
+        countries: 'CA',
         showResultMarkers: true,
         collapsed: true,
         minLength: 5,
@@ -60,7 +62,7 @@ const GeoControl = () => {
       }
 
       const geocoder = new MaplibreGeocoder(geocoderApi, geocoderOptions)
-      map.addControl(geocoder)
+      map.addControl(geocoder, 'top-left')
 
       return () => {
         map.removeControl(geocoder)
