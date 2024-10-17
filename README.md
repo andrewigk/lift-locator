@@ -1,0 +1,1 @@
+Lift Locator aims to help fitness enthusiasts around the world to find suitable training environments. Drawing on crowd-sourced community data, Lift Locator is an up-to-date compendium of specialized training facilities around the world.
