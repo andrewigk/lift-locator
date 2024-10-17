@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 import { useMap } from 'react-map-gl/maplibre'
@@ -5,7 +6,7 @@ import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import '../App.css'
 
-const GeoControl = () => {
+const GeoControl = ({ setViewState, setMarker, addGymLocation }) => {
   const { current: map } = useMap()
 
   const geocoderApi = {
@@ -63,6 +64,27 @@ const GeoControl = () => {
 
       const geocoder = new MaplibreGeocoder(geocoderApi, geocoderOptions)
       map.addControl(geocoder, 'top-left')
+
+      geocoder.on('result', (event) => {
+        const { result } = event
+        const [longitude, latitude] = result.center
+        setViewState({ longitude, latitude, zoom: 10 })
+        setMarker({
+          markerLongitude: longitude,
+          markerLatitude: latitude,
+        })
+
+        // Prompt user to add gym location
+        const addGym = window.confirm(
+          'Do you want to add a gym at this location?'
+        )
+        if (addGym) {
+          const gymName = window.prompt('Enter the name of the gym:')
+          if (gymName) {
+            addGymLocation(longitude, latitude, gymName)
+          }
+        }
+      })
 
       return () => {
         map.removeControl(geocoder)

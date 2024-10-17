@@ -5,7 +5,14 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 import GymMarker from './GymMarker.jsx'
 import GeoControl from './GeoControl.jsx'
 
-const Map = ({ viewState, marker, setViewState, setMarker }) => {
+const Map = ({
+  viewState,
+  marker,
+  setViewState,
+  setMarker,
+  gymLocations,
+  addGymLocation,
+}) => {
   const { longitude, latitude, zoom } = viewState
 
   return (
@@ -23,8 +30,10 @@ const Map = ({ viewState, marker, setViewState, setMarker }) => {
       <GeoControl
         setViewState={setViewState}
         setMarker={setMarker}
+        addGymLocation={addGymLocation}
       ></GeoControl>
       <NavigationControl />
+      <GymMarker gymLocations={gymLocations} />
     </MapLibre>
   )
 }

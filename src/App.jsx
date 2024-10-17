@@ -15,6 +15,15 @@ function App() {
     markerLongitude: 100,
     markerLatitude: 50,
   })
+
+  const [gymLocations, setGymLocations] = useState([])
+
+  const addGymLocation = (longitude, latitude, name) => {
+    setGymLocations((prevLocations) => [
+      ...prevLocations,
+      { longitude, latitude, name },
+    ])
+  }
   return (
     <>
       <NavBar></NavBar>
@@ -23,6 +32,8 @@ function App() {
         setViewState={setViewState}
         marker={marker}
         setMarker={setMarker}
+        gymLocations={gymLocations}
+        addGymLocation={addGymLocation}
         onMove={(evt) => setViewState(evt.viewState)}
       ></Map>
     </>
