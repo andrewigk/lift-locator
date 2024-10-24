@@ -23,6 +23,7 @@ const getUsers = async (req, res) => {
  */
 const handleUserAuth = async (req, res) => {
   const { code } = req.query
+  console.log(code)
   // const { oauthId } = req.body
   try {
     const { tokens } = await oauth2Client.getToken(code)
