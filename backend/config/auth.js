@@ -1,4 +1,4 @@
-const { google } = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library')
 
 const dotenv = require('dotenv')
 
@@ -9,7 +9,7 @@ dotenv.config()
  * from the client_secret.json file. To get these credentials for your application, visit
  * https://console.cloud.google.com/apis/credentials.
  */
-const oauth2Client = new google.auth.OAuth2(
+const oauth2Client = new OAuth2Client(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
   process.env.REDIRECT_URL
