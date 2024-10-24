@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const UserSchema = new mongoose.Schema({
   oauthId: { type: String, required: true },
   provider: { type: String, required: true },
+  role: { type: String, enum: ['admin', 'user'] },
   username: {
     type: String,
     required: true,
