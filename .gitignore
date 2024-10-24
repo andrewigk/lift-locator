@@ -944,3 +944,4 @@ backend/node_modules/whatwg-url/lib/URLSearchParams-impl.js
 backend/node_modules/whatwg-url/lib/URLSearchParams.js
 backend/node_modules/whatwg-url/lib/utils.js
 backend/node_modules/whatwg-url/lib/VoidFunction.js
+backend/.env

@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const { getUsers, createUser } = require('../controllers/userController')
-
-// GET request to fetch users
-router.get('/', getUsers)
+const {
+  getUsers,
+  getUserById,
+  createUser,
+} = require('../controllers/userController')
 
 // POST request to create a new user
-router.post('/', createUser)
+router.post('/api/users/register', createUser)
+
+router.post('./api/users/login', getUserById)
 
 module.exports = router
