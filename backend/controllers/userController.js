@@ -1,7 +1,10 @@
-/* Example sample code, must be modified obviously */
 const User = require('../models/User') // Mongoose model
 
-// Fetch all users (SIMPLIFIED)
+/** Retrieves all users in the database.
+ *
+ * @param {*} req
+ * @param {*} res
+ */
 const getUsers = async (req, res) => {
   try {
     const users = await User.find() // Fetch users from DB
@@ -11,6 +14,11 @@ const getUsers = async (req, res) => {
   }
 }
 
+/** Retrieves a user by their OAuth ID.
+ *
+ * @param {*} req
+ * @param {*} res
+ */
 const getUserById = async (req, res) => {
   const { oauthId } = req.body
   try {
@@ -25,7 +33,11 @@ const getUserById = async (req, res) => {
   }
 }
 
-// Create a new user (SIMPLIFIED)
+/** Creates a new user.
+ *
+ * @param {*} req
+ * @param {*} res
+ */
 const createUser = async (req, res) => {
   const { email, oauthId, provider, role, username, createdAt } = req.body
 
