@@ -1,3 +1,5 @@
+const { oauth2Client } = require('../config/auth.js')
+
 const User = require('../models/User') // Mongoose model
 
 /** Retrieves all users in the database.
@@ -19,12 +21,46 @@ const getUsers = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const getUserById = async (req, res) => {
-  const { oauthId } = req.body
+const handleUserAuth = async (req, res) => {
+  const { code } = req.query
+  // const { oauthId } = req.body
   try {
-    const user = await User.findOne({ oauthId })
+    const { tokens } = await oauth2Client.getToken(code)
+    oauth2Client.setCredentials(tokens)
+
+    const ticket = await oauth2Client.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.CLIENT_ID,
+    })
+
+    const payload = ticket.getPayload()
+
+    let user = await User.findOne({ oauthId: payload.sub })
     if (user) {
-      res.status(200).json(user)
+      res.status(200).json({
+        message: 'User created successfully',
+        user: {
+          email: user.email,
+          username: user.username,
+        },
+      })
+    } else if (!user) {
+      let defaultName = payload.email.split('@')[0]
+      user = new User({
+        email: payload.email,
+        oauthId: payload.sub,
+        provider: 'google',
+        username: defaultName,
+        createdAt: new Date(),
+      })
+      await user.save()
+      res.status(200).json({
+        message: 'User created successfully',
+        user: {
+          email: user.email,
+          username: user.username,
+        },
+      })
     } else {
       res.status(404).json({ message: 'User not found' })
     }
@@ -63,4 +99,4 @@ const createUser = async (req, res) => {
 /* Add more functions to handle other options */
 
 // Exporting functions to be used in routes
-module.exports = { getUsers, getUserById, createUser }
+module.exports = { handleUserAuth }
