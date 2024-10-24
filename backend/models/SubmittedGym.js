@@ -1,6 +1,8 @@
-/* Schema model for Gym, must be modified */
 const mongoose = require('mongoose')
 
+/** Schema model for gym submissions.
+ *
+ */
 const SubmittedGymSchema = new mongoose.Schema({
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
