@@ -3084,3 +3084,8 @@ backend/node_modules/uuid/dist/esm-node/v35.js
 backend/node_modules/uuid/dist/esm-node/validate.js
 backend/node_modules/uuid/dist/esm-node/version.js
 backend/.env
+bfg-1.14.0.jar
+.git.bfg-report/2024-10-24/15-41-25/cache-stats.txt
+.git.bfg-report/2024-10-24/15-41-25/object-id-map.old-new.txt
+.git.bfg-report/2024-10-24/15-41-25/deleted-files.txt
+.env
