@@ -22,16 +22,27 @@ const getUsers = async (req, res) => {
  * @param {*} res
  */
 const handleUserAuth = async (req, res) => {
-  const { code } = req.query
-  console.log(code)
-  // const { oauthId } = req.body
+  const { code } = req.body
+  console.log('Code retrieved:', code)
+
+  const { tokens } = await oauth2Client.getToken({
+    code: code,
+    callback: () => {
+      console.log(code)
+    },
+  })
+
+  console.log('Tokens retrieved: ', tokens)
+
   try {
-    const { tokens } = await oauth2Client.getToken(code)
     oauth2Client.setCredentials(tokens)
 
+    if (!tokens.id_token) {
+      throw new Error('No ID token received')
+    }
     const ticket = await oauth2Client.verifyIdToken({
       idToken: tokens.id_token,
-      audience: process.env.CLIENT_ID,
+      audience: oauth2Client._clientId,
     })
 
     const payload = ticket.getPayload()
@@ -39,7 +50,7 @@ const handleUserAuth = async (req, res) => {
     let user = await User.findOne({ oauthId: payload.sub })
     if (user) {
       res.status(200).json({
-        message: 'User created successfully',
+        message: 'User found. Sign in successful',
         user: {
           email: user.email,
           username: user.username,
@@ -66,7 +77,8 @@ const handleUserAuth = async (req, res) => {
       res.status(404).json({ message: 'User not found' })
     }
   } catch (err) {
-    res.status(500).json({ message: 'Server Error' })
+    console.error('Error in handleUserAuth: ', err)
+    res.status(500).json({ message: 'Server Error. Sorry bud.' })
   }
 }
 

@@ -2,7 +2,6 @@
 
 const express = require('express')
 const cors = require('cors')
-const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 
 dotenv.config()
@@ -11,8 +10,12 @@ dotenv.config()
 const app = express()
 
 /** Middleware to handle cross-origin resources and JSON body parsing */
-app.use(cors())
-app.use(bodyParser.json())
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+  })
+)
+app.use(express.json())
 
 // this is also where you would serve any static files
 // like app assets like images

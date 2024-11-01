@@ -1,8 +1,10 @@
 import './App.css'
 import Map from './components/Map.jsx'
 import NavBar from './components/NavBar.jsx'
-
+import { useGoogleLogin } from '@react-oauth/google'
 import { useState } from 'react'
+import axios from 'axios'
+import AuthButton from './components/AuthButton.jsx'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -18,6 +20,22 @@ function App() {
 
   const [gymLocations, setGymLocations] = useState([])
 
+  const googleLogin = useGoogleLogin({
+    flow: 'auth-code',
+    onSuccess: async (codeResponse) => {
+      console.log('Sending payload: ', codeResponse.code)
+      const tokens = await axios.post(
+        'http://localhost:5000/api/users/auth/google/',
+        {
+          code: codeResponse.code,
+        }
+      )
+
+      console.log(tokens)
+    },
+    onError: (errorResponse) => console.log(errorResponse),
+  })
+
   const addGymLocation = (longitude, latitude, name) => {
     setGymLocations((prevLocations) => [
       ...prevLocations,
@@ -26,6 +44,7 @@ function App() {
   }
   return (
     <>
+      <AuthButton googleLogin={googleLogin}></AuthButton>
       <NavBar></NavBar>
       <Map
         viewState={viewState}
