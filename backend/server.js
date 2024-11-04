@@ -3,19 +3,35 @@
 const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
+const session = require('express-session')
+const crypto = require('crypto')
 
 dotenv.config()
 
 // this statement initializes the app
 const app = express()
 
+const sessionSecret = crypto.randomBytes(32).toString('hex')
+
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
   cors({
     origin: 'http://localhost:5173',
+    credentials: true,
   })
 )
 app.use(express.json())
+
+app.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+    },
+  })
+)
 
 // this is also where you would serve any static files
 // like app assets like images
