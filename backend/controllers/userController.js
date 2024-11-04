@@ -32,10 +32,10 @@ const handleUserAuth = async (req, res) => {
     },
   })
 
-  console.log('Tokens retrieved: ', tokens)
-
   try {
     oauth2Client.setCredentials(tokens)
+    req.session.credentials = tokens
+    console.log('Session credentials after setting:', req.session.credentials)
 
     if (!tokens.id_token) {
       throw new Error('No ID token received')
@@ -82,6 +82,24 @@ const handleUserAuth = async (req, res) => {
   }
 }
 
+const handleLogout = async (req, res) => {
+  console.log(req.session.credentials)
+
+  try {
+    if (!req.session.credentials) {
+      return res.status(400).json({ message: 'No credentials found.' })
+    }
+    oauth2Client.setCredentials(req.session.credentials)
+    await oauth2Client.revokeCredentials()
+    req.session.destroy()
+    res.status(200).json({
+      message: 'Credentials revoked successfully. Session destroyed.',
+    })
+  } catch (error) {
+    res.status(500).json({ message: 'Failed.' })
+  }
+}
+
 /** Creates a new user.
  *
  * @param {*} req
@@ -112,4 +130,4 @@ const createUser = async (req, res) => {
 /* Add more functions to handle other options */
 
 // Exporting functions to be used in routes
-module.exports = { handleUserAuth }
+module.exports = { handleUserAuth, handleLogout }

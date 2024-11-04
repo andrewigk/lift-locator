@@ -4,7 +4,6 @@ import NavBar from './components/NavBar.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useState } from 'react'
 import axios from 'axios'
-import AuthButton from './components/AuthButton.jsx'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -20,21 +19,47 @@ function App() {
 
   const [gymLocations, setGymLocations] = useState([])
 
+  const [currentUser, setCurrentUser] = useState({
+    username: null,
+    email: null,
+  })
+
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
       console.log('Sending payload: ', codeResponse.code)
-      const tokens = await axios.post(
+      const res = await axios.post(
         'http://localhost:5000/api/users/auth/google/',
         {
           code: codeResponse.code,
-        }
+        },
+        { withCredentials: true }
       )
-
-      console.log(tokens)
+      console.log(res)
+      console.log(res.data?.message)
+      console.log(res.data?.user)
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
+        username: res.data?.user?.username,
+        email: res.data?.user?.email,
+      }))
     },
     onError: (errorResponse) => console.log(errorResponse),
   })
+
+  const logOut = async () => {
+    const res = await axios.post(
+      'http://localhost:5000/api/users/auth/logout/',
+      {},
+      { withCredentials: true }
+    )
+    if (res.status === 200) {
+      setCurrentUser({
+        username: null,
+        email: null,
+      })
+    }
+  }
 
   const addGymLocation = (longitude, latitude, name) => {
     setGymLocations((prevLocations) => [
@@ -44,8 +69,12 @@ function App() {
   }
   return (
     <>
-      <AuthButton googleLogin={googleLogin}></AuthButton>
-      <NavBar></NavBar>
+      <NavBar
+        currentUser={currentUser}
+        googleLogin={googleLogin}
+        logOut={logOut}
+      ></NavBar>
+
       <Map
         viewState={viewState}
         setViewState={setViewState}
