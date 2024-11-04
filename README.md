@@ -8,6 +8,7 @@ MongoDB Atlas + Mongoose
 @react-oauth/google  
 @axios  
 react-map-gl + MapLibre  
+express-session for development, intend to implement a store like connect-redis or connect-mongo  
 
 Build Instructions:  
 ~ In Construction ~  
