@@ -9,6 +9,7 @@ MongoDB Atlas + Mongoose
 @axios  
 react-map-gl + MapLibre  
 express-session for development, intend to implement a store like connect-redis or connect-mongo  
+Docker  
 
 Build Instructions:  
 
