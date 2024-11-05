@@ -15,6 +15,8 @@ const Map = ({
 }) => {
   const { longitude, latitude, zoom } = viewState
 
+  const apiUrl = import.meta.env.VITE_MAP_STYLE
+
   return (
     <MapLibre
       initialViewState={{
@@ -23,7 +25,7 @@ const Map = ({
         zoom: zoom,
       }}
       style={{ width: 900, height: 600 }}
-      mapStyle="https://api.maptiler.com/maps/streets-v2/style.json?key=mkGy6FQXu312U1OML8Uz"
+      mapStyle={apiUrl}
       dragRotate={false}
       onClick={(event) => console.log(event)}
     >
