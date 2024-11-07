@@ -6,7 +6,7 @@ const AddGym = ({ handleSubmitGym }) => {
     name: '',
     category: '',
     inventory: [],
-    hasKilos: null,
+    hasKilos: false,
     contactInfo: [],
     latitude: 0,
     longitude: 0,
@@ -20,13 +20,14 @@ const AddGym = ({ handleSubmitGym }) => {
     'general',
   ]
 
-  const [checked, isChecked] = useState(false)
-
-  const handleCheckChange = (e) => {
-    setGym({ ...gym, [e.target.name]: e.target.checked })
-  }
   const handleChange = (e) => {
-    setGym({ ...gym, [e.target.name]: e.target.value })
+    const { name, value, type, checked } = e.target
+
+    if (type === 'checkbox') {
+      setGym({ ...gym, [name]: checked })
+    } else {
+      setGym({ ...gym, [name]: value })
+    }
   }
   return (
     <div>
@@ -65,10 +66,10 @@ const AddGym = ({ handleSubmitGym }) => {
               <h4>Has KG plates?</h4>
               <input
                 type="checkbox"
-                id="hasKg"
-                name="hasKg"
-                checked={isChecked}
-                onChange={handleCheckChange}
+                id="hasKilos"
+                name="hasKilos"
+                checked={gym.hasKilos}
+                onChange={handleChange}
               ></input>
             </div>
           ) : (
