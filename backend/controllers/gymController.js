@@ -1,5 +1,5 @@
-const SubmittedGym = require('../models/SubmittedGym')
-const ApprovedGym = require('../models/ApprovedGym')
+const Submission = require('../models/SubmittedGym')
+const Approval = require('../models/ApprovedGym')
 
 /** Retrieves all approved gyms committed to the database.
  *
@@ -8,7 +8,7 @@ const ApprovedGym = require('../models/ApprovedGym')
  */
 const getAllGyms = async (req, res) => {
   try {
-    const gyms = await ApprovedGym.find()
+    const gyms = await Approval.find()
     res.status(200).json(gyms)
   } catch (err) {
     res.status(500).json({ message: 'Server Error' })
@@ -22,15 +22,9 @@ const getAllGyms = async (req, res) => {
  * @param {*} res
  */
 const submitGym = async (req, res) => {
-  const { latitude, longitude, name, images, submittedBy } = req.body
   try {
-    const submission = new SubmittedGym({
-      latitude,
-      longitude,
-      name,
-      images,
-      submittedBy,
-    })
+    // Attempt to pass the entire request body (which hopefully contains all of the form data in the right format to match the Mongoose schema...)
+    const submission = new Submission(req.body)
     await submission.save()
     res.status(201).json(submission)
   } catch (err) {
