@@ -1,6 +1,7 @@
 import './App.css'
 import Map from './components/Map.jsx'
 import NavBar from './components/NavBar.jsx'
+import AddGym from './components/AddGym.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useState } from 'react'
 import axios from 'axios'
@@ -67,6 +68,14 @@ function App() {
       { longitude, latitude, name },
     ])
   }
+
+  const handleSubmitGym = async () => {
+    const res = await axios.post('http://localhost:5000/api/gyms/submit/')
+    if (res.status === 201) {
+      console.log('Gym submitted successfully.')
+    }
+  }
+
   return (
     <>
       <NavBar
@@ -74,7 +83,7 @@ function App() {
         googleLogin={googleLogin}
         logOut={logOut}
       ></NavBar>
-
+      <AddGym handleSubmit={handleSubmitGym}></AddGym>
       <Map
         viewState={viewState}
         setViewState={setViewState}
