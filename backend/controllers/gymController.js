@@ -1,5 +1,6 @@
 const Submission = require('../models/SubmittedGym')
 const Approval = require('../models/ApprovedGym')
+const Equipment = require('../models/Equipment')
 
 /** Retrieves all approved gyms committed to the database.
  *
@@ -11,7 +12,7 @@ const getAllGyms = async (req, res) => {
     const gyms = await Approval.find()
     res.status(200).json(gyms)
   } catch (err) {
-    res.status(500).json({ message: 'Server Error' })
+    res.status(500).json({ message: 'Server Error', error: err })
   }
 }
 
@@ -28,7 +29,17 @@ const submitGym = async (req, res) => {
     await submission.save()
     res.status(201).json(submission)
   } catch (err) {
-    res.status(500).json({ message: 'Server Error' })
+    res.status(500).json({ message: 'Server Error', error: err })
+  }
+}
+
+const getEquipment = async (req, res) => {
+  try {
+    const equipment = await Equipment.find()
+    console.log(equipment)
+    res.status(200).json(equipment)
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error', error: err })
   }
 }
 
@@ -36,4 +47,4 @@ const submitGym = async (req, res) => {
 handled manually by the admin. Especially since a regular user will
 never be approving a gym submission */
 
-module.exports = { getAllGyms, submitGym }
+module.exports = { getAllGyms, submitGym, getEquipment }

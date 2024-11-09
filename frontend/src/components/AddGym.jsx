@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 
+import EquipmentSelect from './EquipmentSelect'
+
 import { useState } from 'react'
 const AddGym = ({ handleSubmitGym }) => {
   const [gym, setGym] = useState({
@@ -20,6 +22,8 @@ const AddGym = ({ handleSubmitGym }) => {
     'general',
   ]
 
+  const condition = ['excellent', 'good', 'fair', 'worn', 'needs repair']
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
 
@@ -29,6 +33,46 @@ const AddGym = ({ handleSubmitGym }) => {
       setGym({ ...gym, [name]: value })
     }
   }
+
+  // Handle inventory change for a specific field
+  const handleInventoryChange = (index, field, value) => {
+    const newInventory = [...gym.inventory]
+    if (!newInventory[index]) {
+      newInventory[index] = {
+        equipment: null,
+        condition: '',
+        count: 0,
+        maxWeight: null,
+        minWeight: null,
+      }
+    }
+    newInventory[index][field] = value
+    setGym({ ...gym, inventory: newInventory })
+  }
+
+  // Add a new inventory item
+  const addInventorySelect = () => {
+    setGym({
+      ...gym,
+      inventory: [
+        ...gym.inventory,
+        {
+          equipment: null,
+          condition: '',
+          count: 0,
+          maxWeight: null,
+          minWeight: null,
+        },
+      ],
+    })
+  }
+
+  // Remove an inventory item
+  const removeInventorySelect = (index) => {
+    const newInventory = gym.inventory.filter((_, i) => i !== index)
+    setGym({ ...gym, inventory: newInventory })
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmitGym}>
@@ -76,6 +120,55 @@ const AddGym = ({ handleSubmitGym }) => {
             ''
           )}
         </div>
+        <div>
+          <h4>Add Inventory</h4>
+          {gym.inventory.map((item, index) => (
+            <div key={index}>
+              <EquipmentSelect
+                index={index}
+                value={item.equipment || ''}
+                handleInventoryChange={handleInventoryChange}
+              />
+              <input
+                type="number"
+                placeholder="Count"
+                value={item.count || ''}
+                onChange={(e) =>
+                  handleInventoryChange(index, 'count', e.target.value)
+                }
+              />
+              <select
+                value={item.condition || ''}
+                onChange={(e) =>
+                  handleInventoryChange(index, 'condition', e.target.value)
+                }
+              >
+                {condition.map((specCon, index) => {
+                  return (
+                    <option value={specCon} key={index}>
+                      {specCon}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => removeInventorySelect(index)}
+          style={{ marginLeft: '10px' }}
+        >
+          Remove
+        </button>
+
+        <button type="button" onClick={addInventorySelect}>
+          {gym.inventory.length === 0 ? 'Add an item' : 'Add another item'}
+        </button>
+
+        <button type="submit">Submit Gym</button>
+
+        <pre>{JSON.stringify(gym, null, 2)}</pre>
       </form>
     </div>
   )
