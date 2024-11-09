@@ -46,6 +46,8 @@ const AddGym = ({ handleSubmitGym }) => {
         minWeight: null,
       }
     }
+    //Bracket notation is so cool... dynamically sets like newInventory.index.field but depending on
+    // index and the field that was passed into the function 'brand' 'type' etc.
     newInventory[index][field] = value
     setGym({ ...gym, inventory: newInventory })
   }
@@ -65,12 +67,6 @@ const AddGym = ({ handleSubmitGym }) => {
         },
       ],
     })
-  }
-
-  // Remove an inventory item
-  const removeInventorySelect = (index) => {
-    const newInventory = gym.inventory.filter((_, i) => i !== index)
-    setGym({ ...gym, inventory: newInventory })
   }
 
   return (
@@ -154,20 +150,14 @@ const AddGym = ({ handleSubmitGym }) => {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          onClick={() => removeInventorySelect(index)}
-          style={{ marginLeft: '10px' }}
-        >
-          Remove
-        </button>
-
-        <button type="button" onClick={addInventorySelect}>
-          {gym.inventory.length === 0 ? 'Add an item' : 'Add another item'}
-        </button>
-
-        <button type="submit">Submit Gym</button>
-
+        <div>
+          <button type="button" onClick={addInventorySelect}>
+            {gym.inventory.length === 0 ? 'Add an item' : 'Add another item'}
+          </button>
+        </div>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
         <pre>{JSON.stringify(gym, null, 2)}</pre>
       </form>
     </div>
