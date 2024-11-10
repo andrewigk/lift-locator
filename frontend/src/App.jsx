@@ -83,7 +83,7 @@ function App() {
         googleLogin={googleLogin}
         logOut={logOut}
       ></NavBar>
-      <AddGym handleSubmit={handleSubmitGym}></AddGym>
+      <AddGym handleSubmitGym={handleSubmitGym}></AddGym>
       <Map
         viewState={viewState}
         setViewState={setViewState}
