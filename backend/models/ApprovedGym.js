@@ -48,6 +48,7 @@ const ApprovedGymSchema = new mongoose.Schema({
   ],
   contactInfo: [
     {
+      name: { type: String },
       phoneNumber: { type: String },
       email: { type: String },
     },

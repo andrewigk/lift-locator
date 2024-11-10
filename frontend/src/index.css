@@ -58,6 +58,18 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.formContainer {
+  width: 60vw;
+  max-width: 600px;
+  padding: 0.5rem;
+  background-color: dimgrey;
+}
+.formRow {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5em;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

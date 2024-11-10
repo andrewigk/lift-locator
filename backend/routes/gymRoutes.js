@@ -1,9 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-const { getAllGyms, submitGym } = require('../controllers/gymController')
+const {
+  getAllGyms,
+  submitGym,
+  getEquipment,
+} = require('../controllers/gymController')
 
-router.get('/gyms', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     await getAllGyms(req, res)
   } catch (error) {
@@ -12,7 +16,18 @@ router.get('/gyms', async (req, res) => {
       .json({ message: 'Error retrieving gyms from DB', error: error.message })
   }
 })
-router.post('/gyms/submit', async (req, res) => {
+
+router.get('/equipment', async (req, res) => {
+  try {
+    await getEquipment(req, res)
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error retrieving equipment list from DB',
+      error: error.message,
+    })
+  }
+})
+router.post('/submit', async (req, res) => {
   try {
     await submitGym(req, res)
   } catch (error) {
