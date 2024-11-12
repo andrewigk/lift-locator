@@ -70,8 +70,11 @@ function App() {
     setlngLat({ lng: coords[0], lat: coords[1] })
   }
 
-  const handleSubmitGym = async () => {
-    const res = await axios.post('http://localhost:5000/api/gyms/submit/')
+  const handleSubmitGym = async (gymData) => {
+    const res = await axios.post(
+      'http://localhost:5000/api/gyms/submit/',
+      gymData
+    )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
     }
@@ -97,6 +100,7 @@ function App() {
         setMarker={setMarker}
         gymLocations={gymLocations}
         addGymLocation={addGymLocation}
+        lngLat={lngLat}
         onMove={(evt) => setViewState(evt.viewState)}
       ></Map>
     </>

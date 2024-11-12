@@ -4,11 +4,9 @@ import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 import { useMap } from 'react-map-gl/maplibre'
 import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
-import Popup from './Popup.jsx'
-import ReactDOMServer from 'react-dom/server'
 import '../App.css'
 
-const GeoControl = ({ setViewState, setMarker, addGymLocation }) => {
+const GeoControl = ({ setViewState, addGymLocation }) => {
   const { current: map } = useMap()
 
   const handleClick = (event) => {
@@ -69,10 +67,6 @@ const GeoControl = ({ setViewState, setMarker, addGymLocation }) => {
           console.log(item.geometry.coordinates)
           // Customize your HTML here
           return `<div style="color: black"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
-
-          /* ReactDOMServer.renderToString(
-            <Popup item={item} addGymLocation={addGymLocation} />
-          ) */
         },
         zoom: 10,
       }

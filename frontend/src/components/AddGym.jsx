@@ -39,10 +39,12 @@ const AddGym = ({ handleSubmitGym, lngLat }) => {
 
   const condition = ['excellent', 'good', 'fair', 'worn', 'needs repair']
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(gym)
     // perform extra validation here on the gym data before allowing it for submission
 
-    handleSubmitGym()
+    handleSubmitGym(gym)
   }
 
   const handleChange = (e) => {
