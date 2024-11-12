@@ -16,6 +16,20 @@ const getAllGyms = async (req, res) => {
   }
 }
 
+/** Retrieves all submitted gyms committed to the database.
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+const getAllSubmissions = async (req, res) => {
+  try {
+    const submissions = await Submission.find()
+    res.status(200).json(submissions)
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error', error: err })
+  }
+}
+
 /** Creates a new gym submission, which is a separate collection
  * than approved submissions.
  *
@@ -26,8 +40,29 @@ const submitGym = async (req, res) => {
   try {
     // Attempt to pass the entire request body (which hopefully contains all of the form data in the right format to match the Mongoose schema...)
     const submission = new Submission(req.body)
+    console.log(submission)
+
     await submission.save()
     res.status(201).json(submission)
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error', error: err })
+  }
+}
+
+/** Creates a new document in Approvals collection, effectively "approving" a submission
+ *
+ *
+ * @param {*} req
+ * @param {*} res
+ */
+const approveGym = async (req, res) => {
+  try {
+    const approval = new Approval(req.body)
+    console.log(approval)
+    approval.status = 'approved'
+
+    await approval.save()
+    res.status(201).json(approval)
   } catch (err) {
     res.status(500).json({ message: 'Server Error', error: err })
   }
@@ -47,4 +82,10 @@ const getEquipment = async (req, res) => {
 handled manually by the admin. Especially since a regular user will
 never be approving a gym submission */
 
-module.exports = { getAllGyms, submitGym, getEquipment }
+module.exports = {
+  getAllGyms,
+  submitGym,
+  getEquipment,
+  getAllSubmissions,
+  approveGym,
+}

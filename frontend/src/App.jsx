@@ -18,12 +18,15 @@ function App() {
     markerLatitude: 50,
   })
 
+  // Represents the list of ALL gyms, to be used in props below App
   const [gymLocations, setGymLocations] = useState([])
 
   const [currentUser, setCurrentUser] = useState({
     username: null,
     email: null,
   })
+
+  const [lngLat, setlngLat] = useState({ lng: '', lat: '' })
 
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
@@ -62,15 +65,16 @@ function App() {
     }
   }
 
-  const addGymLocation = (longitude, latitude, name) => {
-    setGymLocations((prevLocations) => [
-      ...prevLocations,
-      { longitude, latitude, name },
-    ])
+  const addGymLocation = (event) => {
+    const coords = event.split(',')
+    setlngLat({ lng: coords[0], lat: coords[1] })
   }
 
-  const handleSubmitGym = async () => {
-    const res = await axios.post('http://localhost:5000/api/gyms/submit/')
+  const handleSubmitGym = async (gymData) => {
+    const res = await axios.post(
+      'http://localhost:5000/api/gyms/submit/',
+      gymData
+    )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
     }
@@ -83,7 +87,12 @@ function App() {
         googleLogin={googleLogin}
         logOut={logOut}
       ></NavBar>
-      <AddGym handleSubmitGym={handleSubmitGym}></AddGym>
+      <AddGym
+        handleSubmitGym={handleSubmitGym}
+        gymLocations={gymLocations}
+        setGymLocations={setGymLocations}
+        lngLat={lngLat}
+      ></AddGym>
       <Map
         viewState={viewState}
         setViewState={setViewState}
@@ -91,6 +100,7 @@ function App() {
         setMarker={setMarker}
         gymLocations={gymLocations}
         addGymLocation={addGymLocation}
+        lngLat={lngLat}
         onMove={(evt) => setViewState(evt.viewState)}
       ></Map>
     </>

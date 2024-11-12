@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 
-import EquipmentSelect from './EquipmentSelect'
+import EquipmentSelect from './EquipmentSelect.jsx'
 
-import { useState } from 'react'
-const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
+import { useState, useEffect } from 'react'
+const AddGym = ({ handleSubmitGym, lngLat }) => {
+  // Represents an individual gym, not the list of all gyms
   const [gym, setGym] = useState({
     name: '',
     category: '',
@@ -11,9 +12,22 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
     hasKilos: false,
     contactInfo: { name: null, phoneNumber: null, email: null },
     // latitude and longitude should be passed by props when the marker is interacted with
-    latitude: latitude,
-    longitude: longitude,
+    latitude: lngLat.lat,
+    longitude: lngLat.lng,
   })
+
+  // Update gym latitude and longitude when lngLat changes
+  useEffect(() => {
+    if (lngLat.lat && lngLat.lng) {
+      setGym((prevState) => ({
+        ...prevState,
+        latitude: lngLat.lat,
+        longitude: lngLat.lng,
+      }))
+    }
+  }, [lngLat]) // Trigger the effect whenever lngLat changes
+
+  console.log(gym)
 
   const categories = [
     'powerlifting',
@@ -25,10 +39,12 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
 
   const condition = ['excellent', 'good', 'fair', 'worn', 'needs repair']
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log(gym)
     // perform extra validation here on the gym data before allowing it for submission
 
-    handleSubmitGym()
+    handleSubmitGym(gym)
   }
 
   const handleChange = (e) => {
@@ -99,7 +115,7 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
             type="text"
             id="name"
             name="name"
-            value={gym.name}
+            value={gym.name || ''}
             onChange={handleChange}
           ></input>
         </div>
@@ -107,7 +123,7 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
           <label htmlFor="categories">Category/Niche</label>
           <select
             name="category"
-            value={gym.category}
+            value={gym.category || ''}
             onChange={handleChange}
             style={{ width: '100px' }}
           >
@@ -183,7 +199,7 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
               type="text"
               id="contactName"
               name="contactInfo.name"
-              value={gym.contactInfo.name}
+              value={gym.contactInfo.name || ''}
               onChange={handleChange}
             ></input>
           </div>
@@ -193,7 +209,7 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
               type="text"
               id="contactPhone"
               name="contactInfo.phoneNumber"
-              value={gym.contactInfo.phoneNumber}
+              value={gym.contactInfo.phoneNumber || ''}
               onChange={handleChange}
             ></input>
           </div>
@@ -203,7 +219,7 @@ const AddGym = ({ handleSubmitGym, latitude, longitude }) => {
               type="text"
               id="contactEmail"
               name="contactInfo.email"
-              value={gym.contactInfo.email}
+              value={gym.contactInfo.email || ''}
               onChange={handleChange}
             ></input>
           </div>

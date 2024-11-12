@@ -6,8 +6,19 @@ import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import '../App.css'
 
-const GeoControl = ({ setViewState, setMarker, addGymLocation }) => {
+const GeoControl = ({ setViewState, addGymLocation }) => {
   const { current: map } = useMap()
+
+  const handleClick = (event) => {
+    if (event.target.id === 'addGymButton') {
+      const gymData = event.target.getAttribute('data-gym-data')
+      if (gymData) {
+        // Pass the gym data (as JSON or as needed) to the addGymLocation function
+        addGymLocation(gymData)
+        // addGymLocation(JSON.parse(gymData))
+      }
+    }
+  }
 
   const geocoderApi = {
     forwardGeocode: async (config) => {
@@ -41,23 +52,21 @@ const GeoControl = ({ setViewState, setMarker, addGymLocation }) => {
 
   useEffect(() => {
     if (map) {
+      document.addEventListener('click', handleClick)
+
       const geocoderOptions = {
         maplibregl: maplibregl,
         placeholder: 'Search for a location...',
         limit: 10,
         countries: 'CA',
-        showResultMarkers: true,
+        marker: true,
         collapsed: true,
         minLength: 5,
         popup: true,
         popupRender: (item) => {
+          console.log(item.geometry.coordinates)
           // Customize your HTML here
-          return `
-            <div class="popup" style="padding: 10px;">
-              <h4>${item.place_name}</h4>
-            
-            </div>
-          `
+          return `<div style="color: black"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
         },
         zoom: 10,
       }
@@ -67,27 +76,18 @@ const GeoControl = ({ setViewState, setMarker, addGymLocation }) => {
 
       geocoder.on('result', (event) => {
         const { result } = event
+        console.log(event)
         const [longitude, latitude] = result.center
         setViewState({ longitude, latitude, zoom: 10 })
-        setMarker({
-          markerLongitude: longitude,
-          markerLatitude: latitude,
-        })
 
-        // Prompt user to add gym location
-        const addGym = window.confirm(
-          'Do you want to add a gym at this location?'
-        )
-        if (addGym) {
-          const gymName = window.prompt('Enter the name of the gym:')
-          if (gymName) {
-            addGymLocation(longitude, latitude, gymName)
-          }
-        }
+        //setMarker({
+        //markerLongitude: longitude,
+        // markerLatitude: latitude,
       })
 
       return () => {
         map.removeControl(geocoder)
+        document.removeEventListener('click', handleClick)
       }
     }
   }, [map])
