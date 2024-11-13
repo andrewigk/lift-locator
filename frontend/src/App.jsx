@@ -4,8 +4,9 @@ import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import axios from 'axios'
+import { useClickOutside } from '@reactuses/core'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -152,6 +153,14 @@ function App() {
     }
   }
 
+  const [visible, setVisible] = useState(false)
+
+  const modalRef = useRef(null)
+
+  useClickOutside(modalRef, () => {
+    setVisible(false)
+  })
+
   /*
   useEffect(() => {
     fetchSubmissions()
@@ -165,18 +174,18 @@ function App() {
         logOut={logOut}
         showSubmissions={showSubmissions}
       ></NavBar>
+      {visible && (
+        <AddGym
+          gym={gym}
+          setGym={setGym}
+          handleSubmitGym={handleSubmitGym}
+          gymLocations={gymLocations}
+          setGymLocations={setGymLocations}
+          lngLat={lngLat}
+          modalRef={modalRef}
+        ></AddGym>
+      )}
       <div className={'appContainer'}>
-        {showForm && (
-          <AddGym
-            gym={gym}
-            setGym={setGym}
-            handleSubmitGym={handleSubmitGym}
-            gymLocations={gymLocations}
-            setGymLocations={setGymLocations}
-            lngLat={lngLat}
-          ></AddGym>
-        )}
-
         <Map
           viewState={viewState}
           setViewState={setViewState}
@@ -188,6 +197,8 @@ function App() {
           onMove={(evt) => setViewState(evt.viewState)}
           showForm={showForm}
           setShowForm={setShowForm}
+          visible={visible}
+          setVisible={setVisible}
         ></Map>
         {showComponent && (
           <ApproveSubmissions

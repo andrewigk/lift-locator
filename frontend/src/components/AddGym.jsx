@@ -3,7 +3,7 @@
 import EquipmentSelect from './EquipmentSelect.jsx'
 
 import { useEffect } from 'react'
-const AddGym = ({ handleSubmitGym, lngLat, gym, setGym }) => {
+const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
   // Update gym latitude and longitude when lngLat changes
   useEffect(() => {
     if (lngLat.lat && lngLat.lng) {
@@ -84,7 +84,21 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym }) => {
   }
 
   return (
-    <div className="formContainer">
+    <div
+      ref={modalRef}
+      className="formContainer"
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: 420,
+        maxWidth: '100%',
+        zIndex: 10,
+        border: '1px solid var(--c-input-border)',
+        backgroundColor: 'rgba(36, 36, 36, 0.9)',
+      }}
+    >
       <form onSubmit={handleSubmitGym}>
         <h2>Add a gym listing</h2>
         <div className="formRow">

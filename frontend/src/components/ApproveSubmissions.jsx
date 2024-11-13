@@ -2,7 +2,7 @@
 
 const ApproveSubmissions = ({ submissions, handleApproval }) => {
   return (
-    <div>
+    <div className="approvalContainer">
       <h2>Gym Submission Data</h2>
       {submissions.map((submission, index) => {
         return (

@@ -7,14 +7,12 @@ import GeoControl from './GeoControl.jsx'
 
 const Map = ({
   viewState,
-  marker,
   setViewState,
   setMarker,
   gymLocations,
   addGymLocation,
   lngLat,
-  showForm,
-  setShowForm,
+  setVisible,
 }) => {
   const { longitude, latitude, zoom } = viewState
 
@@ -38,8 +36,7 @@ const Map = ({
           setMarker={setMarker}
           addGymLocation={addGymLocation}
           lngLat={lngLat}
-          showForm={showForm}
-          setShowForm={setShowForm}
+          setVisible={setVisible}
         ></GeoControl>
         <NavigationControl />
         <GymMarker gymLocations={gymLocations} />
