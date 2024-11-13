@@ -2,20 +2,8 @@
 
 import EquipmentSelect from './EquipmentSelect.jsx'
 
-import { useState, useEffect } from 'react'
-const AddGym = ({ handleSubmitGym, lngLat }) => {
-  // Represents an individual gym, not the list of all gyms
-  const [gym, setGym] = useState({
-    name: '',
-    category: '',
-    inventory: [],
-    hasKilos: false,
-    contactInfo: { name: null, phoneNumber: null, email: null },
-    // latitude and longitude should be passed by props when the marker is interacted with
-    latitude: lngLat.lat,
-    longitude: lngLat.lng,
-  })
-
+import { useEffect } from 'react'
+const AddGym = ({ handleSubmitGym, lngLat, gym, setGym }) => {
   // Update gym latitude and longitude when lngLat changes
   useEffect(() => {
     if (lngLat.lat && lngLat.lng) {
@@ -25,7 +13,7 @@ const AddGym = ({ handleSubmitGym, lngLat }) => {
         longitude: lngLat.lng,
       }))
     }
-  }, [lngLat]) // Trigger the effect whenever lngLat changes
+  }, [lngLat, setGym]) // Trigger the effect whenever lngLat changes
 
   console.log(gym)
 
@@ -41,7 +29,7 @@ const AddGym = ({ handleSubmitGym, lngLat }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(gym)
+
     // perform extra validation here on the gym data before allowing it for submission
 
     handleSubmitGym(gym)
@@ -175,6 +163,7 @@ const AddGym = ({ handleSubmitGym, lngLat }) => {
                   handleInventoryChange(index, 'condition', e.target.value)
                 }
               >
+                <option value="">Select...</option>
                 {condition.map((specCon, index) => {
                   return (
                     <option value={specCon} key={index}>

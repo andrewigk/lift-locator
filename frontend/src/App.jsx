@@ -18,15 +18,28 @@ function App() {
     markerLatitude: 50,
   })
 
+  const [lngLat, setlngLat] = useState({ lng: '', lat: '' })
+
+  // Represents an individual gym, not the list of all gyms
+  const [gym, setGym] = useState({
+    name: '',
+    category: '',
+    inventory: [],
+    hasKilos: false,
+    contactInfo: { name: null, phoneNumber: null, email: null },
+    // latitude and longitude should be passed by props when the marker is interacted with
+    latitude: lngLat.lat,
+    longitude: lngLat.lng,
+  })
+
   // Represents the list of ALL gyms, to be used in props below App
   const [gymLocations, setGymLocations] = useState([])
 
   const [currentUser, setCurrentUser] = useState({
     username: null,
     email: null,
+    oauthId: null,
   })
-
-  const [lngLat, setlngLat] = useState({ lng: '', lat: '' })
 
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
@@ -46,6 +59,7 @@ function App() {
         ...prevUser,
         username: res.data?.user?.username,
         email: res.data?.user?.email,
+        oauthId: res.data?.user?.oauthId,
       }))
     },
     onError: (errorResponse) => console.log(errorResponse),
@@ -71,12 +85,26 @@ function App() {
   }
 
   const handleSubmitGym = async (gymData) => {
+    setGym((prevState) => ({
+      ...prevState,
+      submittedBy: currentUser.oauthId,
+    }))
     const res = await axios.post(
       'http://localhost:5000/api/gyms/submit/',
       gymData
     )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
+      setGym({
+        name: '',
+        category: '',
+        inventory: [],
+        hasKilos: false,
+        contactInfo: { name: null, phoneNumber: null, email: null },
+        // latitude and longitude should be passed by props when the marker is interacted with
+        latitude: '',
+        longitude: '',
+      })
     }
   }
 
@@ -87,22 +115,26 @@ function App() {
         googleLogin={googleLogin}
         logOut={logOut}
       ></NavBar>
-      <AddGym
-        handleSubmitGym={handleSubmitGym}
-        gymLocations={gymLocations}
-        setGymLocations={setGymLocations}
-        lngLat={lngLat}
-      ></AddGym>
-      <Map
-        viewState={viewState}
-        setViewState={setViewState}
-        marker={marker}
-        setMarker={setMarker}
-        gymLocations={gymLocations}
-        addGymLocation={addGymLocation}
-        lngLat={lngLat}
-        onMove={(evt) => setViewState(evt.viewState)}
-      ></Map>
+      <div className={'appContainer'}>
+        <AddGym
+          gym={gym}
+          setGym={setGym}
+          handleSubmitGym={handleSubmitGym}
+          gymLocations={gymLocations}
+          setGymLocations={setGymLocations}
+          lngLat={lngLat}
+        ></AddGym>
+        <Map
+          viewState={viewState}
+          setViewState={setViewState}
+          marker={marker}
+          setMarker={setMarker}
+          gymLocations={gymLocations}
+          addGymLocation={addGymLocation}
+          lngLat={lngLat}
+          onMove={(evt) => setViewState(evt.viewState)}
+        ></Map>
+      </div>
     </>
   )
 }

@@ -28,7 +28,7 @@ const ApprovedGymSchema = new mongoose.Schema({
       comment: { type: String },
     },
   ],
-  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  submittedBy: { type: String, required: true },
   inventory: [
     {
       equipment: {

@@ -19,26 +19,28 @@ const Map = ({
   const apiUrl = import.meta.env.VITE_MAP_STYLE
 
   return (
-    <MapLibre
-      initialViewState={{
-        longitude: longitude,
-        latitude: latitude,
-        zoom: zoom,
-      }}
-      style={{ width: 900, height: 600 }}
-      mapStyle={apiUrl}
-      dragRotate={false}
-      onClick={(event) => console.log(event)}
-    >
-      <GeoControl
-        setViewState={setViewState}
-        setMarker={setMarker}
-        addGymLocation={addGymLocation}
-        lngLat={lngLat}
-      ></GeoControl>
-      <NavigationControl />
-      <GymMarker gymLocations={gymLocations} />
-    </MapLibre>
+    <div>
+      <MapLibre
+        initialViewState={{
+          longitude: longitude,
+          latitude: latitude,
+          zoom: zoom,
+        }}
+        style={{ width: 900, height: 600 }}
+        mapStyle={apiUrl}
+        dragRotate={false}
+        onClick={(event) => console.log(event)}
+      >
+        <GeoControl
+          setViewState={setViewState}
+          setMarker={setMarker}
+          addGymLocation={addGymLocation}
+          lngLat={lngLat}
+        ></GeoControl>
+        <NavigationControl />
+        <GymMarker gymLocations={gymLocations} />
+      </MapLibre>
+    </div>
   )
 }
 export default Map

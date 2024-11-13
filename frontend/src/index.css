@@ -59,8 +59,9 @@ button:focus-visible {
 }
 
 .formContainer {
-  width: 60vw;
-  max-width: 600px;
+  width: 20vw;
+  max-width: 400px;
+
   padding: 0.5rem;
   background-color: dimgrey;
 }
@@ -68,6 +69,15 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   padding: 0.5em;
+}
+
+.popup {
+  color: black;
+}
+
+.appContainer {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
 }
 
 @media (prefers-color-scheme: light) {
