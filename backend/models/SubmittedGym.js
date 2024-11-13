@@ -48,6 +48,7 @@ const SubmittedGymSchema = new mongoose.Schema({
   hasKilos: { type: Boolean },
   contactInfo: [
     {
+      name: { type: String },
       phoneNumber: { type: String },
       email: { type: String },
     },

@@ -2,8 +2,9 @@ import './App.css'
 import Map from './components/Map.jsx'
 import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
+import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
     latitude: lngLat.lat,
     longitude: lngLat.lng,
   })
+
+  const [submissions, setSubmissions] = useState([])
 
   // Represents the list of ALL gyms, to be used in props below App
   const [gymLocations, setGymLocations] = useState([])
@@ -60,6 +63,7 @@ function App() {
         username: res.data?.user?.username,
         email: res.data?.user?.email,
         oauthId: res.data?.user?.oauthId,
+        role: res.data?.user?.role,
       }))
     },
     onError: (errorResponse) => console.log(errorResponse),
@@ -84,15 +88,14 @@ function App() {
     setlngLat({ lng: coords[0], lat: coords[1] })
   }
 
-  const handleSubmitGym = async (gymData) => {
+  const handleSubmitGym = async (e) => {
+    e.preventDefault()
+
     setGym((prevState) => ({
       ...prevState,
       submittedBy: currentUser.oauthId,
     }))
-    const res = await axios.post(
-      'http://localhost:5000/api/gyms/submit/',
-      gymData
-    )
+    const res = await axios.post('http://localhost:5000/api/gyms/submit/', gym)
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
       setGym({
@@ -107,6 +110,19 @@ function App() {
       })
     }
   }
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        const res = await axios.get(
+          'http://localhost:5000/api/gyms/submissions'
+        )
+        setSubmissions(res.data)
+      } catch (error) {
+        console.error('Error fetching submissions:', error)
+      }
+    }
+    fetchSubmissions()
+  }, [])
 
   return (
     <>
@@ -134,6 +150,11 @@ function App() {
           lngLat={lngLat}
           onMove={(evt) => setViewState(evt.viewState)}
         ></Map>
+        {currentUser.role === 'admin' ? (
+          <ApproveSubmissions submissions={submissions}></ApproveSubmissions>
+        ) : (
+          ''
+        )}
       </div>
     </>
   )

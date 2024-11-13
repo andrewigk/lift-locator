@@ -77,7 +77,8 @@ button:focus-visible {
 
 .appContainer {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 3fr 1fr;
+  width: 80vw;
 }
 
 @media (prefers-color-scheme: light) {

@@ -15,8 +15,6 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym }) => {
     }
   }, [lngLat, setGym]) // Trigger the effect whenever lngLat changes
 
-  console.log(gym)
-
   const categories = [
     'powerlifting',
     'bodybuilding',
@@ -26,14 +24,6 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym }) => {
   ]
 
   const condition = ['excellent', 'good', 'fair', 'worn', 'needs repair']
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    // perform extra validation here on the gym data before allowing it for submission
-
-    handleSubmitGym(gym)
-  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -95,7 +85,7 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym }) => {
 
   return (
     <div className="formContainer">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitGym}>
         <h2>Add a gym listing</h2>
         <div className="formRow">
           <label htmlFor="name">Name</label>

@@ -55,6 +55,7 @@ const handleUserAuth = async (req, res) => {
           email: user.email,
           username: user.username,
           oauthId: payload.sub,
+          role: user.role,
         },
       })
     } else if (!user) {
@@ -73,6 +74,7 @@ const handleUserAuth = async (req, res) => {
           email: user.email,
           username: user.username,
           oauthId: payload.sub,
+          role: user.role,
         },
       })
     } else {
