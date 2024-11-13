@@ -2,10 +2,9 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
+  background-color: #242424;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -59,15 +58,30 @@ button:focus-visible {
 }
 
 .formContainer {
-  width: 60vw;
-  max-width: 600px;
+  width: 20vw;
+  max-width: 400px;
+
   padding: 0.5rem;
-  background-color: dimgrey;
 }
 .formRow {
   display: flex;
   flex-direction: column;
   padding: 0.5em;
+}
+
+.popup {
+  color: black;
+}
+
+.appContainer {
+  display: flex;
+  max-width: 1200px;
+}
+
+.approvalContainer {
+  padding: 1em;
+  max-width: 400px;
+  background-color: rgba(85, 85, 85, 0.3);
 }
 
 @media (prefers-color-scheme: light) {

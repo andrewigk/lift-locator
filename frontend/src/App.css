@@ -1,5 +1,4 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -16,10 +15,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.popup {
-  color: black;
 }
 
 .maplibregl-popup .maplibregl-popup-content .maplibregl-popup-close-button {

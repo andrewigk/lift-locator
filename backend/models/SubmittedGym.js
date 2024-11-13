@@ -27,7 +27,7 @@ const SubmittedGymSchema = new mongoose.Schema({
       comment: { type: String },
     },
   ],
-  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  submittedBy: { type: String, required: true },
   inventory: [
     {
       equipment: {
@@ -48,6 +48,7 @@ const SubmittedGymSchema = new mongoose.Schema({
   hasKilos: { type: Boolean },
   contactInfo: [
     {
+      name: { type: String },
       phoneNumber: { type: String },
       email: { type: String },
     },

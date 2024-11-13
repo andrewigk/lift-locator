@@ -6,13 +6,15 @@ import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import '../App.css'
 
-const GeoControl = ({ setViewState, addGymLocation }) => {
+const GeoControl = ({ setViewState, addGymLocation, setVisible }) => {
   const { current: map } = useMap()
 
   const handleClick = (event) => {
     if (event.target.id === 'addGymButton') {
       const gymData = event.target.getAttribute('data-gym-data')
       if (gymData) {
+        //setShowForm(!showForm)
+        setVisible(true)
         // Pass the gym data (as JSON or as needed) to the addGymLocation function
         addGymLocation(gymData)
         // addGymLocation(JSON.parse(gymData))
@@ -66,7 +68,7 @@ const GeoControl = ({ setViewState, addGymLocation }) => {
         popupRender: (item) => {
           console.log(item.geometry.coordinates)
           // Customize your HTML here
-          return `<div style="color: black"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
+          return `<div id="popup" style="color: black"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
         },
         zoom: 10,
       }
@@ -79,10 +81,6 @@ const GeoControl = ({ setViewState, addGymLocation }) => {
         console.log(event)
         const [longitude, latitude] = result.center
         setViewState({ longitude, latitude, zoom: 10 })
-
-        //setMarker({
-        //markerLongitude: longitude,
-        // markerLatitude: latitude,
       })
 
       return () => {

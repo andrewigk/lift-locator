@@ -7,38 +7,41 @@ import GeoControl from './GeoControl.jsx'
 
 const Map = ({
   viewState,
-  marker,
   setViewState,
   setMarker,
   gymLocations,
   addGymLocation,
   lngLat,
+  setVisible,
 }) => {
   const { longitude, latitude, zoom } = viewState
 
   const apiUrl = import.meta.env.VITE_MAP_STYLE
 
   return (
-    <MapLibre
-      initialViewState={{
-        longitude: longitude,
-        latitude: latitude,
-        zoom: zoom,
-      }}
-      style={{ width: 900, height: 600 }}
-      mapStyle={apiUrl}
-      dragRotate={false}
-      onClick={(event) => console.log(event)}
-    >
-      <GeoControl
-        setViewState={setViewState}
-        setMarker={setMarker}
-        addGymLocation={addGymLocation}
-        lngLat={lngLat}
-      ></GeoControl>
-      <NavigationControl />
-      <GymMarker gymLocations={gymLocations} />
-    </MapLibre>
+    <div className="mapContainer">
+      <MapLibre
+        initialViewState={{
+          longitude: longitude,
+          latitude: latitude,
+          zoom: zoom,
+        }}
+        style={{ width: 900, height: 600 }}
+        mapStyle={apiUrl}
+        dragRotate={false}
+        onClick={(event) => console.log(event)}
+      >
+        <GeoControl
+          setViewState={setViewState}
+          setMarker={setMarker}
+          addGymLocation={addGymLocation}
+          lngLat={lngLat}
+          setVisible={setVisible}
+        ></GeoControl>
+        <NavigationControl />
+        <GymMarker gymLocations={gymLocations} />
+      </MapLibre>
+    </div>
   )
 }
 export default Map
