@@ -6,13 +6,19 @@ import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import '../App.css'
 
-const GeoControl = ({ setViewState, addGymLocation }) => {
+const GeoControl = ({
+  setViewState,
+  addGymLocation,
+  showForm,
+  setShowForm,
+}) => {
   const { current: map } = useMap()
 
   const handleClick = (event) => {
     if (event.target.id === 'addGymButton') {
       const gymData = event.target.getAttribute('data-gym-data')
       if (gymData) {
+        setShowForm(!showForm)
         // Pass the gym data (as JSON or as needed) to the addGymLocation function
         addGymLocation(gymData)
         // addGymLocation(JSON.parse(gymData))

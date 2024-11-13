@@ -13,13 +13,15 @@ const Map = ({
   gymLocations,
   addGymLocation,
   lngLat,
+  showForm,
+  setShowForm,
 }) => {
   const { longitude, latitude, zoom } = viewState
 
   const apiUrl = import.meta.env.VITE_MAP_STYLE
 
   return (
-    <div>
+    <div className="mapContainer">
       <MapLibre
         initialViewState={{
           longitude: longitude,
@@ -36,6 +38,8 @@ const Map = ({
           setMarker={setMarker}
           addGymLocation={addGymLocation}
           lngLat={lngLat}
+          showForm={showForm}
+          setShowForm={setShowForm}
         ></GeoControl>
         <NavigationControl />
         <GymMarker gymLocations={gymLocations} />

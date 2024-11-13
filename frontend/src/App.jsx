@@ -4,7 +4,7 @@ import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import axios from 'axios'
 
 function App() {
@@ -34,6 +34,11 @@ function App() {
   })
 
   const [submissions, setSubmissions] = useState([])
+
+  // Used to toggle state of Submissions component
+  const [showComponent, setShowComponent] = useState(false)
+
+  const [showForm, setShowForm] = useState(false)
 
   // Represents the list of ALL gyms, to be used in props below App
   const [gymLocations, setGymLocations] = useState([])
@@ -108,21 +113,49 @@ function App() {
         latitude: '',
         longitude: '',
       })
+      setShowForm(!showForm)
+      await fetchSubmissions()
     }
   }
-  useEffect(() => {
-    const fetchSubmissions = async () => {
-      try {
+
+  const fetchSubmissions = async () => {
+    try {
+      if (currentUser.role === 'admin') {
         const res = await axios.get(
           'http://localhost:5000/api/gyms/submissions'
         )
         setSubmissions(res.data)
-      } catch (error) {
-        console.error('Error fetching submissions:', error)
       }
+    } catch (error) {
+      console.error('Error fetching submissions:', error)
     }
+  }
+
+  const showSubmissions = () => {
     fetchSubmissions()
-  }, [])
+    setShowComponent(!showComponent)
+  }
+
+  const handleApproval = async (req) => {
+    try {
+      console.log(req)
+      const res = await axios.post(
+        'http://localhost:5000/api/gyms/approve',
+        req
+      )
+      if (res.status === 201) {
+        console.log('Gym approved successfully.')
+        await fetchSubmissions()
+      }
+    } catch (e) {
+      console.error('Error approving a submission: ', e)
+    }
+  }
+
+  /*
+  useEffect(() => {
+    fetchSubmissions()
+  }, []) */
 
   return (
     <>
@@ -130,16 +163,20 @@ function App() {
         currentUser={currentUser}
         googleLogin={googleLogin}
         logOut={logOut}
+        showSubmissions={showSubmissions}
       ></NavBar>
       <div className={'appContainer'}>
-        <AddGym
-          gym={gym}
-          setGym={setGym}
-          handleSubmitGym={handleSubmitGym}
-          gymLocations={gymLocations}
-          setGymLocations={setGymLocations}
-          lngLat={lngLat}
-        ></AddGym>
+        {showForm && (
+          <AddGym
+            gym={gym}
+            setGym={setGym}
+            handleSubmitGym={handleSubmitGym}
+            gymLocations={gymLocations}
+            setGymLocations={setGymLocations}
+            lngLat={lngLat}
+          ></AddGym>
+        )}
+
         <Map
           viewState={viewState}
           setViewState={setViewState}
@@ -149,11 +186,14 @@ function App() {
           addGymLocation={addGymLocation}
           lngLat={lngLat}
           onMove={(evt) => setViewState(evt.viewState)}
+          showForm={showForm}
+          setShowForm={setShowForm}
         ></Map>
-        {currentUser.role === 'admin' ? (
-          <ApproveSubmissions submissions={submissions}></ApproveSubmissions>
-        ) : (
-          ''
+        {showComponent && (
+          <ApproveSubmissions
+            submissions={submissions}
+            handleApproval={handleApproval}
+          ></ApproveSubmissions>
         )}
       </div>
     </>

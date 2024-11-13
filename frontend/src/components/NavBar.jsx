@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-const NavBar = ({ currentUser, googleLogin, logOut }) => {
+
+const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
   return (
     <div
       style={{
@@ -16,6 +17,11 @@ const NavBar = ({ currentUser, googleLogin, logOut }) => {
         </p>
       </div>
       <div>
+        {currentUser.role === 'admin' ? (
+          <button onClick={() => showSubmissions()}>Submissions</button>
+        ) : (
+          ''
+        )}
         {currentUser.username ? (
           <button onClick={() => logOut()}>Sign Out</button>
         ) : (

@@ -57,7 +57,16 @@ const submitGym = async (req, res) => {
  */
 const approveGym = async (req, res) => {
   try {
+    console.log(req.body._id)
+    let existingSubmission = await Submission.findOne({ _id: req.body._id })
+    if (existingSubmission) {
+      existingSubmission.status = 'approved'
+
+      await existingSubmission.save()
+    }
+
     const approval = new Approval(req.body)
+
     console.log(approval)
     approval.status = 'approved'
 

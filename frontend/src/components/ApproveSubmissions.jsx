@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-const ApproveSubmissions = ({ submissions }) => {
+
+const ApproveSubmissions = ({ submissions, handleApproval }) => {
   return (
     <div>
       <h2>Gym Submission Data</h2>
@@ -9,6 +10,7 @@ const ApproveSubmissions = ({ submissions }) => {
             <h4>{submission.name}</h4>
             <p>{submission.category}</p>
             <p>Submitted by user: {submission.submittedBy}</p>
+            <p>Status: {submission.status}</p>
             {submission.contactInfo.map((item, index) => {
               return (
                 <div key={index}>
@@ -27,6 +29,13 @@ const ApproveSubmissions = ({ submissions }) => {
                 </div>
               )
             })}
+            <button
+              onClick={() => {
+                handleApproval(submission)
+              }}
+            >
+              Approve Listing
+            </button>
           </div>
         )
       })}
