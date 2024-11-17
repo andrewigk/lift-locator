@@ -101,16 +101,16 @@ label {
   padding: 0.3em;
 }
 
-.count {
-}
-
-.condition {
-}
-
-.comment {
-}
 .popup {
   color: black;
+  width: 10vw;
+  padding: 1em;
+  border-radius: 4px;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
 }
 
 .appContainer {

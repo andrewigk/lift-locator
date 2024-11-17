@@ -4,7 +4,7 @@ import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 import { useClickOutside } from '@reactuses/core'
 
@@ -149,6 +149,16 @@ function App() {
     }
   }
 
+  const fetchApprovals = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/gyms/')
+      console.log(res)
+      setGymLocations(res.data)
+    } catch (error) {
+      console.error('Error fetching approvals:', error)
+    }
+  }
+
   const handleApproval = async (req) => {
     try {
       console.log(req)
@@ -164,6 +174,10 @@ function App() {
       console.error('Error approving a submission: ', e)
     }
   }
+
+  useEffect(() => {
+    fetchApprovals()
+  }, [])
 
   return (
     <>
@@ -199,6 +213,7 @@ function App() {
           visible={visible}
           setVisible={setVisible}
         ></Map>
+
         {showComponent && (
           <ApproveSubmissions
             submissions={submissions}
