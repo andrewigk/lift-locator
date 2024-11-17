@@ -88,11 +88,12 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
       ref={modalRef}
       className="formContainer"
       style={{
-        position: 'absolute',
+        position: 'fixed',
         left: '50%',
         top: '50%',
         transform: 'translate(-50%,-50%)',
-        width: 420,
+        overflowY: 'auto' /* Enable vertical scrolling */,
+        maxHeight: '90vh',
         maxWidth: '100%',
         zIndex: 10,
         border: '1px solid var(--c-input-border)',
@@ -107,6 +108,7 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
             type="text"
             id="name"
             name="name"
+            className="gymName"
             value={gym.name || ''}
             onChange={handleChange}
           ></input>
@@ -115,9 +117,9 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
           <label htmlFor="categories">Category/Niche</label>
           <select
             name="category"
+            className="categories"
             value={gym.category || ''}
             onChange={handleChange}
-            style={{ width: '100px' }}
           >
             <option value="">Select...</option>
             {categories.map((category) => (
@@ -130,7 +132,7 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
         <div className="formRow">
           {gym.category === 'powerlifting' ||
           gym.category === 'weightlifting' ? (
-            <div>
+            <div className="hasKilos">
               <h4>Has KG plates?</h4>
               <input
                 type="checkbox"
@@ -144,17 +146,19 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
             ''
           )}
         </div>
-        <div className="formRow">
-          <h2>Add Inventory</h2>
+        <div className="inventoryRow">
+          <h2>Add Inventory</h2>{' '}
           {gym.inventory.map((item, index) => (
-            <div key={index}>
+            <div className="inventoryItem" key={index}>
               <EquipmentSelect
                 index={index}
                 value={item.equipment || ''}
                 handleInventoryChange={handleInventoryChange}
               />
               <input
-                type="number"
+                type="text"
+                size="3"
+                className="count"
                 placeholder="Count"
                 value={item.count || ''}
                 onChange={(e) =>
@@ -163,11 +167,12 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
               />
               <select
                 value={item.condition || ''}
+                className="condition"
                 onChange={(e) =>
                   handleInventoryChange(index, 'condition', e.target.value)
                 }
               >
-                <option value="">Select...</option>
+                <option value="">Condition...</option>
                 {condition.map((specCon, index) => {
                   return (
                     <option value={specCon} key={index}>
@@ -176,6 +181,19 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
                   )
                 })}
               </select>
+
+              <input
+                type="text"
+                id="comment"
+                name="comment"
+                size="40"
+                className="comment"
+                placeholder="Additional comments..."
+                value={item.comment || ''}
+                onChange={(e) =>
+                  handleInventoryChange(index, 'comment', e.target.value)
+                }
+              />
             </div>
           ))}
         </div>

@@ -50,6 +50,19 @@ function App() {
     oauthId: null,
   })
 
+  const [visible, setVisible] = useState(false)
+
+  const modalRef = useRef(null)
+
+  useClickOutside(modalRef, () => {
+    setVisible(false)
+  })
+
+  const showSubmissions = () => {
+    fetchSubmissions()
+    setShowComponent(!showComponent)
+  }
+
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
@@ -97,11 +110,14 @@ function App() {
   const handleSubmitGym = async (e) => {
     e.preventDefault()
 
-    setGym((prevState) => ({
-      ...prevState,
+    const gymData = {
+      ...gym,
       submittedBy: currentUser.oauthId,
-    }))
-    const res = await axios.post('http://localhost:5000/api/gyms/submit/', gym)
+    }
+    const res = await axios.post(
+      'http://localhost:5000/api/gyms/submit/',
+      gymData
+    )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
       setGym({
@@ -114,7 +130,8 @@ function App() {
         latitude: '',
         longitude: '',
       })
-      setShowForm(!showForm)
+      setVisible(false)
+
       await fetchSubmissions()
     }
   }
@@ -132,11 +149,6 @@ function App() {
     }
   }
 
-  const showSubmissions = () => {
-    fetchSubmissions()
-    setShowComponent(!showComponent)
-  }
-
   const handleApproval = async (req) => {
     try {
       console.log(req)
@@ -152,19 +164,6 @@ function App() {
       console.error('Error approving a submission: ', e)
     }
   }
-
-  const [visible, setVisible] = useState(false)
-
-  const modalRef = useRef(null)
-
-  useClickOutside(modalRef, () => {
-    setVisible(false)
-  })
-
-  /*
-  useEffect(() => {
-    fetchSubmissions()
-  }, []) */
 
   return (
     <>

@@ -57,9 +57,13 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+label {
+  display: block;
+}
+
 .formContainer {
-  width: 20vw;
-  max-width: 400px;
+  width: 40vw;
+  max-width: 600px;
 
   padding: 0.5rem;
 }
@@ -69,6 +73,42 @@ button:focus-visible {
   padding: 0.5em;
 }
 
+.inventoryRow {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5em;
+}
+
+.inventoryItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.3em;
+  gap: 0.2em;
+}
+
+.hasKilos {
+  display: flex;
+  gap: 1em;
+}
+
+.gymName,
+.categories,
+.equipment,
+.count,
+.condition,
+.comment,
+.hasKilos {
+  padding: 0.3em;
+}
+
+.count {
+}
+
+.condition {
+}
+
+.comment {
+}
 .popup {
   color: black;
 }
