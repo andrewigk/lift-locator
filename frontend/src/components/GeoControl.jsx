@@ -68,7 +68,7 @@ const GeoControl = ({ setViewState, addGymLocation, setVisible }) => {
         popupRender: (item) => {
           console.log(item.geometry.coordinates)
           // Customize your HTML here
-          return `<div id="popup" style="color: black"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
+          return `<div id="popup" class="popup"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
         },
         zoom: 10,
       }

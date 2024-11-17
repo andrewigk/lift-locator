@@ -41,6 +41,7 @@ const SubmittedGymSchema = new mongoose.Schema({
         required: true,
       },
       count: { type: Number, required: true },
+      comment: { type: String },
       maxWeight: { type: Number }, // Used for dumbbells
       minWeight: { type: Number }, // Used for dumbbells
     },

@@ -4,7 +4,7 @@ import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 import { useClickOutside } from '@reactuses/core'
 
@@ -49,6 +49,19 @@ function App() {
     email: null,
     oauthId: null,
   })
+
+  const [visible, setVisible] = useState(false)
+
+  const modalRef = useRef(null)
+
+  useClickOutside(modalRef, () => {
+    setVisible(false)
+  })
+
+  const showSubmissions = () => {
+    fetchSubmissions()
+    setShowComponent(!showComponent)
+  }
 
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
@@ -97,11 +110,14 @@ function App() {
   const handleSubmitGym = async (e) => {
     e.preventDefault()
 
-    setGym((prevState) => ({
-      ...prevState,
+    const gymData = {
+      ...gym,
       submittedBy: currentUser.oauthId,
-    }))
-    const res = await axios.post('http://localhost:5000/api/gyms/submit/', gym)
+    }
+    const res = await axios.post(
+      'http://localhost:5000/api/gyms/submit/',
+      gymData
+    )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
       setGym({
@@ -114,7 +130,8 @@ function App() {
         latitude: '',
         longitude: '',
       })
-      setShowForm(!showForm)
+      setVisible(false)
+
       await fetchSubmissions()
     }
   }
@@ -132,9 +149,14 @@ function App() {
     }
   }
 
-  const showSubmissions = () => {
-    fetchSubmissions()
-    setShowComponent(!showComponent)
+  const fetchApprovals = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/gyms/')
+      console.log(res)
+      setGymLocations(res.data)
+    } catch (error) {
+      console.error('Error fetching approvals:', error)
+    }
   }
 
   const handleApproval = async (req) => {
@@ -153,18 +175,9 @@ function App() {
     }
   }
 
-  const [visible, setVisible] = useState(false)
-
-  const modalRef = useRef(null)
-
-  useClickOutside(modalRef, () => {
-    setVisible(false)
-  })
-
-  /*
   useEffect(() => {
-    fetchSubmissions()
-  }, []) */
+    fetchApprovals()
+  }, [])
 
   return (
     <>
@@ -200,6 +213,7 @@ function App() {
           visible={visible}
           setVisible={setVisible}
         ></Map>
+
         {showComponent && (
           <ApproveSubmissions
             submissions={submissions}

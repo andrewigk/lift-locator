@@ -23,6 +23,7 @@ const EquipmentSelect = ({ index, value, handleInventoryChange }) => {
   return (
     <select
       value={value}
+      className="equipment"
       onChange={(e) =>
         handleInventoryChange(index, 'equipment', e.target.value)
       }
