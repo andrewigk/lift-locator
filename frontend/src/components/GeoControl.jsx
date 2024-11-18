@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import '../App.css'
 
-const GeoControl = ({ setViewState, addGymLocation, setVisible }) => {
+const GeoControl = ({ addGymLocation, setVisible }) => {
   const { current: map } = useMap()
 
   const handleClick = (event) => {
@@ -60,28 +60,55 @@ const GeoControl = ({ setViewState, addGymLocation, setVisible }) => {
         maplibregl: maplibregl,
         placeholder: 'Search for a location...',
         limit: 10,
-        countries: 'CA',
         marker: true,
-        collapsed: true,
         minLength: 5,
         popup: true,
+        flyTo: { zoom: 5 },
+
+        render: (item) => {
+          const houseNumber = item.properties.address?.house_number || ''
+          const addressParts = [
+            item.properties.address?.road || '',
+            item.properties.address?.city || '',
+            item.properties.address?.state || '',
+            item.properties.address?.country || '',
+            item.properties.address?.postcode || '',
+          ]
+
+          const formattedAddress =
+            houseNumber + ' ' + addressParts.filter(Boolean).join(', ')
+          return `
+            <div class="geocoder-result">
+              <strong>
+            ${formattedAddress}
+              </strong><br>
+              
+            </div>
+          `
+        },
+        getItemValue: (item) => {
+          console.log(item)
+          return (
+            item.properties.address.house_number +
+            ' ' +
+            item.properties.address.road +
+            ', ' +
+            item.properties.address.city +
+            ', ' +
+            item.properties.address.state +
+            ', ' +
+            item.properties.address.country
+          )
+        },
         popupRender: (item) => {
           console.log(item.geometry.coordinates)
           // Customize your HTML here
           return `<div id="popup" class="popup"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
         },
-        zoom: 10,
       }
 
       const geocoder = new MaplibreGeocoder(geocoderApi, geocoderOptions)
       map.addControl(geocoder, 'top-left')
-
-      geocoder.on('result', (event) => {
-        const { result } = event
-        console.log(event)
-        const [longitude, latitude] = result.center
-        setViewState({ longitude, latitude, zoom: 10 })
-      })
 
       return () => {
         map.removeControl(geocoder)

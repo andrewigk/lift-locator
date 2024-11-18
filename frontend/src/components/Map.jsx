@@ -1,14 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import MapLibre, { NavigationControl, useMap } from 'react-map-gl/maplibre'
-import MaplibreGeocoder from '@maplibre/maplibre-gl-geocoder'
 import GymMarker from './GymMarker.jsx'
 import GeoControl from './GeoControl.jsx'
 
 const Map = ({
   viewState,
-  setViewState,
-  setMarker,
   gymLocations,
   addGymLocation,
   lngLat,
@@ -32,8 +29,6 @@ const Map = ({
         onClick={(event) => console.log(event)}
       >
         <GeoControl
-          setViewState={setViewState}
-          setMarker={setMarker}
           addGymLocation={addGymLocation}
           lngLat={lngLat}
           setVisible={setVisible}
