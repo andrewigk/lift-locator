@@ -3,7 +3,7 @@ import { Marker } from 'react-map-gl/maplibre'
 import maplibregl from 'maplibre-gl'
 import { MdLocationPin } from 'react-icons/md'
 
-const GymMarker = ({ gymLocations }) => {
+const GymMarker = ({ gymLocations, equipmentList }) => {
   const handleMarkerClick = async (latitude, longitude, popup) => {
     const result = await reverseGeocode(latitude, longitude)
     console.log(result)
@@ -94,15 +94,32 @@ const GymMarker = ({ gymLocations }) => {
         <div class="inventory-content">
           <h4>Equipment Inventory</h4>
           <ul>
-            ${gym.inventory.map(
-              (item) => `
+            ${gym.inventory
+              .map((item) => {
+                const foundItem = equipmentList.find(
+                  (equipmentItem) => item.equipment === equipmentItem._id
+                )
+
+                return `
                   <li>
-                    ${item.equipment} - ${item.condition} (${item.count})
+                  <div class="equipment-item">
+                    <div class="equipment-item-name">
+                    <p>${foundItem.brand} - ${foundItem.type}</p>
+                    </div>
+                    <div class="equipment-condition-count">
+                    <p><span class="equipment-item-heading">Condition: </span>${item.condition}</p>
+                    <p><span class="equipment-item-heading">Count: </span> ${item.count}</p>
+                    </div>
+                    <p><span class="equipment-item-heading">Comments: </span> ${item.comment}</p>
+                  </div>
                   </li>`
-            )}
+              })
+              .join('')}
           </ul>
-        </div>      
+        </div>
+        <div class="last-updated">      
             <p>Last Updated: ${gym.lastUpdated.split('T')[0]}</p>
+        </div>
             </div>
             </div>`
           )
@@ -123,7 +140,7 @@ const GymMarker = ({ gymLocations }) => {
           >
             <div
               className="marker-icon"
-              style={{ color: 'red', fontSize: '1.75em' }}
+              style={{ color: 'red', fontSize: '2em' }}
             >
               <MdLocationPin />
             </div>

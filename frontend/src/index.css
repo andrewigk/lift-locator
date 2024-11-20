@@ -11,6 +11,24 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+::-webkit-scrollbar {
+  width: 12px; /* Width of the vertical scrollbar */
+  height: 12px; /* Height of the horizontal scrollbar */
+}
+
+/* Styling the scrollbar track (background) */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Light gray background */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Styling the scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Gray color */
+  border-radius: 10px; /* Rounded corners */
+  min-height: 30px; /* Ensures the thumb is not too tall */
+}
 * {
   margin: 0;
   padding: 0;
@@ -109,7 +127,7 @@ label {
 .popup {
   color: black;
   max-width: 20vw;
-  max-height: 30vh;
+  max-height: 35vh;
   padding: 1em;
   border-radius: 4px;
   overflow-y: auto;
@@ -129,6 +147,27 @@ label {
   padding: 1em;
   max-width: 400px;
   background-color: rgba(85, 85, 85, 0.3);
+}
+
+.equipment-item {
+  border: 1px solid rgba(68, 68, 68, 0.062);
+  padding: 0.5em;
+  margin-bottom: 0.2em;
+  background-color: #f9f9f9;
+}
+.inventory-content {
+}
+
+.equipment-item-heading {
+  font-weight: bolder;
+}
+.equipment-condition-count {
+  display: flex;
+  justify-content: space-between;
+}
+
+.last-updated {
+  text-align: center;
 }
 
 @media (prefers-color-scheme: light) {

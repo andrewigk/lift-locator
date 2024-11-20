@@ -225,6 +225,7 @@ function App() {
           setShowForm={setShowForm}
           visible={visible}
           setVisible={setVisible}
+          equipmentList={equipmentList}
         ></Map>
 
         {showComponent && (
