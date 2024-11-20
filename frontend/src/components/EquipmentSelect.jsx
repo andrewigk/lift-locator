@@ -1,25 +1,11 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react'
-import axios from 'axios'
 
-const EquipmentSelect = ({ index, value, handleInventoryChange }) => {
-  const [equipmentList, setEquipmentList] = useState([])
-
-  // Fetch the equipment list from the backend using Axios
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/gyms/equipment')
-        setEquipmentList(res.data)
-        console.log(res)
-      } catch (error) {
-        console.error('Error fetching equipment:', error)
-      }
-    }
-
-    fetchEquipment()
-  }, [])
-
+const EquipmentSelect = ({
+  index,
+  value,
+  handleInventoryChange,
+  equipmentList,
+}) => {
   return (
     <select
       value={value}

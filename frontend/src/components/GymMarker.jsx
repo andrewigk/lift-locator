@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Marker } from 'react-map-gl/maplibre'
 import maplibregl from 'maplibre-gl'
+import { MdLocationPin } from 'react-icons/md'
 
 const GymMarker = ({ gymLocations }) => {
   const handleMarkerClick = async (latitude, longitude, popup) => {
@@ -60,10 +61,10 @@ const GymMarker = ({ gymLocations }) => {
   return (
     <div>
       {gymLocations.map((gym, index) => {
-        const popup = new maplibregl.Popup().setLngLat([
-          gym.longitude,
-          gym.latitude,
-        ]).setHTML(`<div class="popup">
+        const popup = new maplibregl.Popup()
+          .setLngLat([gym.longitude, gym.latitude])
+          .setHTML(
+            `<div class="popup">
             <div class="popup-content">
             <h4>${gym.name}</h4>
             <p>Category: ${gym.category}</p>
@@ -90,14 +91,27 @@ const GymMarker = ({ gymLocations }) => {
                       `
                 : ''
             } 
-                    
+        <div class="inventory-content">
+          <h4>Equipment Inventory</h4>
+          <ul>
+            ${gym.inventory.map(
+              (item) => `
+                  <li>
+                    ${item.equipment} - ${item.condition} (${item.count})
+                  </li>`
+            )}
+          </ul>
+        </div>      
             <p>Last Updated: ${gym.lastUpdated.split('T')[0]}</p>
             </div>
-            </div>`)
+            </div>`
+          )
 
-        popup.on('open', () => {
-          handleMarkerClick(gym.latitude, gym.longitude, popup)
-        })
+        popup
+          .on('open', () => {
+            handleMarkerClick(gym.latitude, gym.longitude, popup)
+          })
+          .setMaxWidth('100%')
 
         return (
           <Marker
@@ -107,7 +121,12 @@ const GymMarker = ({ gymLocations }) => {
             anchor="top"
             popup={popup}
           >
-            <div style={{ color: 'blue', fontSize: '30px' }}>📍</div>
+            <div
+              className="marker-icon"
+              style={{ color: 'red', fontSize: '1.75em' }}
+            >
+              <MdLocationPin />
+            </div>
           </Marker>
         )
       })}
