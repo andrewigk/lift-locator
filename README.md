@@ -1,5 +1,7 @@
 Lift Locator aims to help fitness enthusiasts around the world to find suitable training environments. Drawing on crowd-sourced community data, Lift Locator is an up-to-date compendium of specialized training facilities around the world.
 
+Documentation/walk-through of the application can be found here: https://docs.google.com/document/d/1dB8aHhussOCG1jyZbH82DHgGqHAV1xXD5dBEl849vs0/edit?usp=sharing
+
 Tools Used:  
 React.js  
 Express.js/Node  
