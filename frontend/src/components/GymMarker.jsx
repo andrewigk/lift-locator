@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 import { Marker } from 'react-map-gl/maplibre'
 import maplibregl from 'maplibre-gl'
+import { MdLocationPin } from 'react-icons/md'
 
-const GymMarker = ({ gymLocations }) => {
+const GymMarker = ({ gymLocations, equipmentList }) => {
   const handleMarkerClick = async (latitude, longitude, popup) => {
     const result = await reverseGeocode(latitude, longitude)
     console.log(result)
@@ -60,10 +61,10 @@ const GymMarker = ({ gymLocations }) => {
   return (
     <div>
       {gymLocations.map((gym, index) => {
-        const popup = new maplibregl.Popup().setLngLat([
-          gym.longitude,
-          gym.latitude,
-        ]).setHTML(`<div class="popup">
+        const popup = new maplibregl.Popup()
+          .setLngLat([gym.longitude, gym.latitude])
+          .setHTML(
+            `<div class="popup">
             <div class="popup-content">
             <h4>${gym.name}</h4>
             <p>Category: ${gym.category}</p>
@@ -90,14 +91,44 @@ const GymMarker = ({ gymLocations }) => {
                       `
                 : ''
             } 
-                    
-            <p>Last Updated: ${gym.lastUpdated.split('T')[0]}</p>
-            </div>
-            </div>`)
+        <div class="inventory-content">
+          <h4>Equipment Inventory</h4>
+          <ul>
+            ${gym.inventory
+              .map((item) => {
+                const foundItem = equipmentList.find(
+                  (equipmentItem) => item.equipment === equipmentItem._id
+                )
 
-        popup.on('open', () => {
-          handleMarkerClick(gym.latitude, gym.longitude, popup)
-        })
+                return `
+                  <li>
+                  <div class="equipment-item">
+                    <div class="equipment-item-name">
+                    <p>${foundItem.brand} - ${foundItem.type}</p>
+                    </div>
+                    <div class="equipment-condition-count">
+                    <p><span class="equipment-item-heading">Condition: </span>${item.condition}</p>
+                    <p><span class="equipment-item-heading">Count: </span> ${item.count}</p>
+                    </div>
+                    <p><span class="equipment-item-heading">Comments: </span> ${item.comment}</p>
+                  </div>
+                  </li>`
+              })
+              .join('')}
+          </ul>
+        </div>
+        <div class="last-updated">      
+            <p>Last Updated: ${gym.lastUpdated.split('T')[0]}</p>
+        </div>
+            </div>
+            </div>`
+          )
+
+        popup
+          .on('open', () => {
+            handleMarkerClick(gym.latitude, gym.longitude, popup)
+          })
+          .setMaxWidth('100%')
 
         return (
           <Marker
@@ -107,7 +138,12 @@ const GymMarker = ({ gymLocations }) => {
             anchor="top"
             popup={popup}
           >
-            <div style={{ color: 'blue', fontSize: '30px' }}>📍</div>
+            <div
+              className="marker-icon"
+              style={{ color: 'red', fontSize: '2em' }}
+            >
+              <MdLocationPin />
+            </div>
           </Marker>
         )
       })}

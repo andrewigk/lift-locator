@@ -3,7 +3,14 @@
 import EquipmentSelect from './EquipmentSelect.jsx'
 
 import { useEffect } from 'react'
-const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
+const AddGym = ({
+  handleSubmitGym,
+  lngLat,
+  gym,
+  setGym,
+  modalRef,
+  equipmentList,
+}) => {
   // Update gym latitude and longitude when lngLat changes
   useEffect(() => {
     if (lngLat.lat && lngLat.lng) {
@@ -152,6 +159,7 @@ const AddGym = ({ handleSubmitGym, lngLat, gym, setGym, modalRef }) => {
             <div className="inventoryItem" key={index}>
               <EquipmentSelect
                 index={index}
+                equipmentList={equipmentList}
                 value={item.equipment || ''}
                 handleInventoryChange={handleInventoryChange}
               />

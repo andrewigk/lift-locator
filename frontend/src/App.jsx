@@ -50,6 +50,8 @@ function App() {
     oauthId: null,
   })
 
+  const [equipmentList, setEquipmentList] = useState([])
+
   const [visible, setVisible] = useState(false)
 
   const modalRef = useRef(null)
@@ -136,6 +138,15 @@ function App() {
     }
   }
 
+  const fetchEquipment = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/gyms/equipment')
+      setEquipmentList(res.data)
+      console.log(res)
+    } catch (error) {
+      console.error('Error fetching equipment:', error)
+    }
+  }
   const fetchSubmissions = async () => {
     try {
       if (currentUser.role === 'admin') {
@@ -176,6 +187,7 @@ function App() {
   }
 
   useEffect(() => {
+    fetchEquipment()
     fetchApprovals()
   }, [])
 
@@ -196,6 +208,7 @@ function App() {
           setGymLocations={setGymLocations}
           lngLat={lngLat}
           modalRef={modalRef}
+          equipmentList={equipmentList}
         ></AddGym>
       )}
       <div className={'appContainer'}>
@@ -212,6 +225,7 @@ function App() {
           setShowForm={setShowForm}
           visible={visible}
           setVisible={setVisible}
+          equipmentList={equipmentList}
         ></Map>
 
         {showComponent && (
