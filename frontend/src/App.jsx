@@ -7,6 +7,8 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 import { useClickOutside } from '@reactuses/core'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -77,6 +79,7 @@ function App() {
         },
         { withCredentials: true }
       )
+
       console.log(res)
       console.log(res.data?.message)
       console.log(res.data?.user)
@@ -87,8 +90,17 @@ function App() {
         oauthId: res.data?.user?.oauthId,
         role: res.data?.user?.role,
       }))
+      //toast.success('Successfully logged in!')
+      toast.promise(res, {
+        pending: 'Logging into LiftLocator...',
+        success: 'User signed in successfully!',
+        error: 'Sign-in error, please re-try.',
+      })
     },
-    onError: (errorResponse) => console.log(errorResponse),
+    onError: (errorResponse) => {
+      toast.error('Log-in failed. Please re-try.')
+      console.log(errorResponse)
+    },
   })
 
   const logOut = async () => {
@@ -101,6 +113,8 @@ function App() {
       setCurrentUser({
         username: null,
         email: null,
+        oauthId: null,
+        role: null,
       })
     }
   }
@@ -123,6 +137,9 @@ function App() {
     )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
+      toast.success(
+        'Gym submitted successfully. Listing is pending admin approval.'
+      )
       setGym({
         name: '',
         category: '',
@@ -207,6 +224,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer position="top-center" autoClose={2500} theme="light" />
       <NavBar
         currentUser={currentUser}
         googleLogin={googleLogin}
@@ -240,6 +258,7 @@ function App() {
           visible={visible}
           setVisible={setVisible}
           equipmentList={equipmentList}
+          currentUser={currentUser}
         ></Map>
 
         {showComponent && (
