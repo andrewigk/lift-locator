@@ -5,19 +5,24 @@ import { useMap } from 'react-map-gl/maplibre'
 import { useEffect } from 'react'
 import maplibregl from 'maplibre-gl'
 import '../App.css'
+import { toast } from 'react-toastify'
 
-const GeoControl = ({ addGymLocation, setVisible }) => {
+const GeoControl = ({ currentUser, addGymLocation, setVisible }) => {
   const { current: map } = useMap()
 
   const handleClick = (event) => {
     if (event.target.id === 'addGymButton') {
-      const gymData = event.target.getAttribute('data-gym-data')
-      if (gymData) {
-        //setShowForm(!showForm)
-        setVisible(true)
-        // Pass the gym data (as JSON or as needed) to the addGymLocation function
-        addGymLocation(gymData)
-        // addGymLocation(JSON.parse(gymData))
+      if (currentUser && currentUser.oauthId) {
+        const gymData = event.target.getAttribute('data-gym-data')
+        if (gymData) {
+          //setShowForm(!showForm)
+          setVisible(true)
+          // Pass the gym data (as JSON or as needed) to the addGymLocation function
+          addGymLocation(gymData)
+          // addGymLocation(JSON.parse(gymData))
+        }
+      } else {
+        toast.error('You must be signed in to submit a gym listing.')
       }
     }
   }

@@ -2,11 +2,15 @@ import './App.css'
 import Map from './components/Map.jsx'
 import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
+import Footer from './components/Footer.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 import { useClickOutside } from '@reactuses/core'
+import Container from '@mui/material/Container'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -48,6 +52,7 @@ function App() {
     username: null,
     email: null,
     oauthId: null,
+    role: null,
   })
 
   const [equipmentList, setEquipmentList] = useState([])
@@ -76,6 +81,7 @@ function App() {
         },
         { withCredentials: true }
       )
+
       console.log(res)
       console.log(res.data?.message)
       console.log(res.data?.user)
@@ -86,8 +92,17 @@ function App() {
         oauthId: res.data?.user?.oauthId,
         role: res.data?.user?.role,
       }))
+      //toast.success('Successfully logged in!')
+      toast.promise(res, {
+        pending: 'Logging into LiftLocator...',
+        success: 'User signed in successfully!',
+        error: 'Sign-in error, please re-try.',
+      })
     },
-    onError: (errorResponse) => console.log(errorResponse),
+    onError: (errorResponse) => {
+      toast.error('Log-in failed. Please re-try.')
+      console.log(errorResponse)
+    },
   })
 
   const logOut = async () => {
@@ -100,6 +115,8 @@ function App() {
       setCurrentUser({
         username: null,
         email: null,
+        oauthId: null,
+        role: null,
       })
     }
   }
@@ -122,6 +139,9 @@ function App() {
     )
     if (res.status === 201) {
       console.log('Gym submitted successfully.')
+      toast.success(
+        'Gym submitted successfully. Listing is pending admin approval.'
+      )
       setGym({
         name: '',
         category: '',
@@ -170,6 +190,18 @@ function App() {
     }
   }
 
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/users/me', {
+        withCredentials: true,
+      })
+      console.log(res)
+      setCurrentUser(res.data.user)
+    } catch (error) {
+      console.error('Error fetching current user:', error)
+    }
+  }
+
   const handleApproval = async (req) => {
     try {
       console.log(req)
@@ -189,29 +221,32 @@ function App() {
   useEffect(() => {
     fetchEquipment()
     fetchApprovals()
+    fetchUser()
   }, [])
 
   return (
     <>
-      <NavBar
-        currentUser={currentUser}
-        googleLogin={googleLogin}
-        logOut={logOut}
-        showSubmissions={showSubmissions}
-      ></NavBar>
-      {visible && (
-        <AddGym
-          gym={gym}
-          setGym={setGym}
-          handleSubmitGym={handleSubmitGym}
-          gymLocations={gymLocations}
-          setGymLocations={setGymLocations}
-          lngLat={lngLat}
-          modalRef={modalRef}
-          equipmentList={equipmentList}
-        ></AddGym>
-      )}
-      <div className={'appContainer'}>
+      <ToastContainer position="top-center" autoClose={2500} theme="light" />
+      <Container maxWidth="1600px">
+        <NavBar
+          currentUser={currentUser}
+          googleLogin={googleLogin}
+          logOut={logOut}
+          showSubmissions={showSubmissions}
+        ></NavBar>
+        {visible && (
+          <AddGym
+            gym={gym}
+            setGym={setGym}
+            handleSubmitGym={handleSubmitGym}
+            gymLocations={gymLocations}
+            setGymLocations={setGymLocations}
+            lngLat={lngLat}
+            modalRef={modalRef}
+            equipmentList={equipmentList}
+          ></AddGym>
+        )}
+
         <Map
           viewState={viewState}
           setViewState={setViewState}
@@ -226,6 +261,7 @@ function App() {
           visible={visible}
           setVisible={setVisible}
           equipmentList={equipmentList}
+          currentUser={currentUser}
         ></Map>
 
         {showComponent && (
@@ -234,7 +270,8 @@ function App() {
             handleApproval={handleApproval}
           ></ApproveSubmissions>
         )}
-      </div>
+        <Footer />
+      </Container>
     </>
   )
 }

@@ -34,6 +34,7 @@ const handleUserAuth = async (req, res) => {
 
   try {
     oauth2Client.setCredentials(tokens)
+
     req.session.credentials = tokens
     console.log('Session credentials after setting:', req.session.credentials)
 
@@ -49,14 +50,24 @@ const handleUserAuth = async (req, res) => {
 
     let user = await User.findOne({ oauthId: payload.sub })
     if (user) {
+      req.session.user = {
+        email: user.email,
+        username: user.username,
+        oauthId: payload.sub,
+        role: user.role,
+      }
+
+      console.log(req.session)
+
       res.status(200).json({
         message: 'User found. Sign in successful',
-        user: {
+        user: req.session.user,
+        /*user: {
           email: user.email,
           username: user.username,
           oauthId: payload.sub,
           role: user.role,
-        },
+        }, */
       })
     } else if (!user) {
       let defaultName = payload.email.split('@')[0]
@@ -68,14 +79,25 @@ const handleUserAuth = async (req, res) => {
         createdAt: new Date(),
       })
       await user.save()
+
+      /* Store the data in session, and send it back in the response too */
+
+      req.session.user = {
+        email: user.email,
+        username: user.username,
+        oauthId: payload.sub,
+        role: user.role,
+      }
+
       res.status(200).json({
         message: 'User created successfully',
-        user: {
+        user: req.session.user,
+        /*user: {
           email: user.email,
           username: user.username,
           oauthId: payload.sub,
           role: user.role,
-        },
+        }, */
       })
     } else {
       res.status(404).json({ message: 'User not found' })
@@ -101,6 +123,14 @@ const handleLogout = async (req, res) => {
     })
   } catch (error) {
     res.status(500).json({ message: 'Failed.' })
+  }
+}
+
+const handleCurrentUser = async (req, res) => {
+  if (req.session.credentials && req.session.user) {
+    res.status(200).json({ user: req.session.user })
+  } else {
+    res.status(401).json({ message: 'Not authenticated.' })
   }
 }
 
@@ -134,4 +164,4 @@ const createUser = async (req, res) => {
 /* Add more functions to handle other options */
 
 // Exporting functions to be used in routes
-module.exports = { handleUserAuth, handleLogout }
+module.exports = { handleUserAuth, handleLogout, handleCurrentUser }

@@ -170,6 +170,27 @@ label {
   text-align: center;
 }
 
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+}
+
+.footer-details {
+  display: flex;
+
+  gap: 1em;
+}
+
+.instagram {
+  text-decoration: none;
+  color: #f9f9f9;
+}
+
+.instagram:hover {
+  color: lightgrey;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

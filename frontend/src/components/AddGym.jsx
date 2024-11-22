@@ -109,6 +109,7 @@ const AddGym = ({
     >
       <form onSubmit={handleSubmitGym}>
         <h2>Add a gym listing</h2>
+
         <div className="formRow">
           <label htmlFor="name">Name</label>
           <input
