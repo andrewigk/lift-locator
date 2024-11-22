@@ -10,8 +10,10 @@ MongoDB Atlas + Mongoose
 @react-oauth/google  
 @axios  
 react-map-gl + MapLibre  
-express-session for development, intend to implement a store like connect-redis or connect-mongo  
-Docker  
+connect-redis/ioredis + Redis for session management 
+Docker
+Material UI
+
 
 Build Instructions:  
 
@@ -19,14 +21,7 @@ You will need a MongoDB Atlas account initialized to set-up the database connect
 You will need to create a new project on Google Cloud Platform and obtain OAuth 2.0 client credentials from the Google API Console: https://console.cloud.google.com/projectselector2/apis/dashboard?supportedpurview=project.  
 You'll also need an API key from a Map tiles provider, such as MapTiler (which has a generous free tier): https://www.maptiler.com/  
 
-Use Docker to build the backend and frontend respectively, passing these environment variables:  
-Backend:  
-MONGO_URI  
-CLIENT_ID  
-CLIENT_SECRET  
-Frontend:  
-VITE_MAP_STYLE  
-VITE_CLIENT_ID  
+Use Docker to run the compose files to build the environment to test on localhost. Will need an .env file in the backend and frontend respectively with the necessary data and fields as specified.
 
 
 
