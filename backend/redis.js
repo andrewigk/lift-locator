@@ -1,10 +1,5 @@
-const redis = require('redis')
+const Redis = require('ioredis')
 
-const redisClient = redis.createClient({
-  url: 'redis://redis:6379',
-  legacyMode: true,
-})
+const redis = new Redis('redis://redis:6379')
 
-redisClient.connect().catch(console.error)
-
-module.exports = redisClient
+module.exports = redis

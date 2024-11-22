@@ -48,6 +48,7 @@ function App() {
     username: null,
     email: null,
     oauthId: null,
+    role: null,
   })
 
   const [equipmentList, setEquipmentList] = useState([])
@@ -170,6 +171,18 @@ function App() {
     }
   }
 
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/users/me', {
+        withCredentials: true,
+      })
+      console.log(res)
+      setCurrentUser(res.data.user)
+    } catch (error) {
+      console.error('Error fetching current user:', error)
+    }
+  }
+
   const handleApproval = async (req) => {
     try {
       console.log(req)
@@ -189,6 +202,7 @@ function App() {
   useEffect(() => {
     fetchEquipment()
     fetchApprovals()
+    fetchUser()
   }, [])
 
   return (

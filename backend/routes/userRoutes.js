@@ -3,7 +3,19 @@ const router = express.Router()
 const {
   handleUserAuth,
   handleLogout,
+  handleCurrentUser,
 } = require('../controllers/userController')
+
+router.get('/me', async (req, res) => {
+  try {
+    await handleCurrentUser(req, res)
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error handling current user request',
+      error: error.message,
+    })
+  }
+})
 
 /** Route to handle google authentication */
 router.post('/auth/google', async (req, res) => {

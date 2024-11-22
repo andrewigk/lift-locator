@@ -6,7 +6,7 @@ const dotenv = require('dotenv')
 const session = require('express-session')
 const crypto = require('crypto')
 const RedisStore = require('connect-redis').default
-const redisClient = require('./redis.js')
+const redis = require('./redis.js')
 
 dotenv.config()
 
@@ -16,10 +16,11 @@ const app = express()
 const sessionSecret = crypto.randomBytes(32).toString('hex')
 
 // Initialize store.
-let redisStore = new RedisStore({
+/* let redisStore = new RedisStore({
   client: redisClient,
   prefix: 'myapp:',
-})
+  legacyMode: true,
+}) */
 
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
@@ -32,12 +33,16 @@ app.use(express.json())
 
 app.use(
   session({
-    store: redisStore,
+    store: new RedisStore({
+      client: redis,
+      legacyMode: true,
+    }),
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 )
