@@ -8,6 +8,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 import { useClickOutside } from '@reactuses/core'
+import Container from '@mui/material/Container'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -226,25 +227,26 @@ function App() {
   return (
     <>
       <ToastContainer position="top-center" autoClose={2500} theme="light" />
-      <NavBar
-        currentUser={currentUser}
-        googleLogin={googleLogin}
-        logOut={logOut}
-        showSubmissions={showSubmissions}
-      ></NavBar>
-      {visible && (
-        <AddGym
-          gym={gym}
-          setGym={setGym}
-          handleSubmitGym={handleSubmitGym}
-          gymLocations={gymLocations}
-          setGymLocations={setGymLocations}
-          lngLat={lngLat}
-          modalRef={modalRef}
-          equipmentList={equipmentList}
-        ></AddGym>
-      )}
-      <div className={'appContainer'}>
+      <Container maxWidth="1600px">
+        <NavBar
+          currentUser={currentUser}
+          googleLogin={googleLogin}
+          logOut={logOut}
+          showSubmissions={showSubmissions}
+        ></NavBar>
+        {visible && (
+          <AddGym
+            gym={gym}
+            setGym={setGym}
+            handleSubmitGym={handleSubmitGym}
+            gymLocations={gymLocations}
+            setGymLocations={setGymLocations}
+            lngLat={lngLat}
+            modalRef={modalRef}
+            equipmentList={equipmentList}
+          ></AddGym>
+        )}
+
         <Map
           viewState={viewState}
           setViewState={setViewState}
@@ -268,8 +270,8 @@ function App() {
             handleApproval={handleApproval}
           ></ApproveSubmissions>
         )}
-      </div>
-      <Footer />
+        <Footer />
+      </Container>
     </>
   )
 }

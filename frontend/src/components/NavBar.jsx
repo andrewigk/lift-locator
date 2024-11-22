@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import Button from '@mui/material/Button'
+import GoogleIcon from '@mui/icons-material/Google'
 
 const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
   return (
@@ -25,9 +27,15 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
         {currentUser.username ? (
           <button onClick={() => logOut()}>Sign Out</button>
         ) : (
-          <button onClick={() => googleLogin()}>
-            Sign up or Sign in with Google 🚀
-          </button>
+          <Button
+            variant="outlined"
+            size="medium"
+            onClick={() => googleLogin()}
+            startIcon={<GoogleIcon />}
+            sx={{ fontWeight: '600' }}
+          >
+            Sign Up or Sign In with Google
+          </Button>
         )}
       </div>
     </div>
