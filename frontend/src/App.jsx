@@ -2,6 +2,7 @@ import './App.css'
 import Map from './components/Map.jsx'
 import NavBar from './components/NavBar.jsx'
 import AddGym from './components/AddGym.jsx'
+import Footer from './components/Footer.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useState, useRef, useEffect } from 'react'
@@ -268,6 +269,7 @@ function App() {
           ></ApproveSubmissions>
         )}
       </div>
+      <Footer />
     </>
   )
 }
