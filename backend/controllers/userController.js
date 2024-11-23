@@ -53,11 +53,9 @@ const handleUserAuth = async (req, res) => {
       req.session.user = {
         email: user.email,
         username: user.username,
-        oauthId: payload.sub,
+        oauthId: user.oauthId,
         role: user.role,
       }
-
-      console.log(req.session)
 
       res.status(200).json({
         message: 'User found. Sign in successful',

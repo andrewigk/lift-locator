@@ -85,19 +85,13 @@ function App() {
       console.log(res)
       console.log(res.data?.message)
       console.log(res.data?.user)
-      setCurrentUser((prevUser) => ({
-        ...prevUser,
+      setCurrentUser({
         username: res.data?.user?.username,
         email: res.data?.user?.email,
         oauthId: res.data?.user?.oauthId,
         role: res.data?.user?.role,
-      }))
-      //toast.success('Successfully logged in!')
-      toast.promise(res, {
-        pending: 'Logging into LiftLocator...',
-        success: 'User signed in successfully!',
-        error: 'Sign-in error, please re-try.',
       })
+      toast.success('Successfully logged in!')
     },
     onError: (errorResponse) => {
       toast.error('Log-in failed. Please re-try.')
@@ -118,6 +112,7 @@ function App() {
         oauthId: null,
         role: null,
       })
+      toast.success('Signed out successfully.')
     }
   }
 
@@ -128,33 +123,38 @@ function App() {
 
   const handleSubmitGym = async (e) => {
     e.preventDefault()
-
-    const gymData = {
-      ...gym,
-      submittedBy: currentUser.oauthId,
-    }
-    const res = await axios.post(
-      'http://localhost:5000/api/gyms/submit/',
-      gymData
-    )
-    if (res.status === 201) {
-      console.log('Gym submitted successfully.')
-      toast.success(
-        'Gym submitted successfully. Listing is pending admin approval.'
+    if (currentUser && currentUser.oauthId) {
+      const gymData = {
+        ...gym,
+        submittedBy: currentUser.oauthId,
+      }
+      const res = await axios.post(
+        'http://localhost:5000/api/gyms/submit/',
+        gymData
       )
-      setGym({
-        name: '',
-        category: '',
-        inventory: [],
-        hasKilos: false,
-        contactInfo: { name: null, phoneNumber: null, email: null },
-        // latitude and longitude should be passed by props when the marker is interacted with
-        latitude: '',
-        longitude: '',
-      })
-      setVisible(false)
+      if (res.status === 201) {
+        console.log('Gym submitted successfully.')
+        toast.success(
+          'Gym submitted successfully. Listing is pending admin approval.'
+        )
+        setGym({
+          name: '',
+          category: '',
+          inventory: [],
+          hasKilos: false,
+          contactInfo: { name: null, phoneNumber: null, email: null },
+          // latitude and longitude should be passed by props when the marker is interacted with
+          latitude: '',
+          longitude: '',
+        })
+        setVisible(false)
 
-      await fetchSubmissions()
+        await fetchSubmissions()
+      }
+    } else {
+      toast.error(
+        'Error with submission. Please check your form details and ensure you are logged in.'
+      )
     }
   }
 

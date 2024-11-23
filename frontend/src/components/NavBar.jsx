@@ -20,12 +20,26 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
       </div>
       <div>
         {currentUser.role === 'admin' ? (
-          <button onClick={() => showSubmissions()}>Submissions</button>
+          <Button
+            variant="outlined"
+            size="medium"
+            onClick={() => showSubmissions()}
+            sx={{ fontWeight: '600', marginRight: '.5rem' }}
+          >
+            Submissions
+          </Button>
         ) : (
           ''
         )}
         {currentUser.username ? (
-          <button onClick={() => logOut()}>Sign Out</button>
+          <Button
+            variant="outlined"
+            size="medium"
+            sx={{ fontWeight: '600' }}
+            onClick={() => logOut()}
+          >
+            Sign Out
+          </Button>
         ) : (
           <Button
             variant="outlined"
