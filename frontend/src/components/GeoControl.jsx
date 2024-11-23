@@ -12,6 +12,7 @@ const GeoControl = ({ currentUser, addGymLocation, setVisible }) => {
 
   const handleClick = (event) => {
     if (event.target.id === 'addGymButton') {
+      console.log(currentUser)
       if (currentUser && currentUser.oauthId) {
         const gymData = event.target.getAttribute('data-gym-data')
         if (gymData) {
@@ -120,7 +121,7 @@ const GeoControl = ({ currentUser, addGymLocation, setVisible }) => {
         document.removeEventListener('click', handleClick)
       }
     }
-  }, [map])
+  }, [map, currentUser])
   return null
 }
 export default GeoControl

@@ -85,12 +85,13 @@ function App() {
       console.log(res)
       console.log(res.data?.message)
       console.log(res.data?.user)
-      setCurrentUser({
+      setCurrentUser((prevUser) => ({
+        ...prevUser,
         username: res.data?.user?.username,
         email: res.data?.user?.email,
         oauthId: res.data?.user?.oauthId,
         role: res.data?.user?.role,
-      })
+      }))
       toast.success('Successfully logged in!')
     },
     onError: (errorResponse) => {
