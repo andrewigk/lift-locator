@@ -11,6 +11,8 @@ import { useClickOutside } from '@reactuses/core'
 import Container from '@mui/material/Container'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Paper from '@mui/material/Paper'
+import Box from '@mui/material/Box'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -228,13 +230,21 @@ function App() {
   return (
     <>
       <ToastContainer position="top-center" autoClose={2500} theme="light" />
-      <Container maxWidth="1600px">
-        <NavBar
-          currentUser={currentUser}
-          googleLogin={googleLogin}
-          logOut={logOut}
-          showSubmissions={showSubmissions}
-        ></NavBar>
+
+      <Container maxWidth="1600px" sx={{ boxShadow: 4 }} disableGutters="true">
+        <Box
+          sx={{
+            padding: 1,
+            color: 'primary.contrastText',
+          }}
+        >
+          <NavBar
+            currentUser={currentUser}
+            googleLogin={googleLogin}
+            logOut={logOut}
+            showSubmissions={showSubmissions}
+          ></NavBar>
+        </Box>
         {visible && (
           <AddGym
             gym={gym}
@@ -247,23 +257,24 @@ function App() {
             equipmentList={equipmentList}
           ></AddGym>
         )}
-
-        <Map
-          viewState={viewState}
-          setViewState={setViewState}
-          marker={marker}
-          setMarker={setMarker}
-          gymLocations={gymLocations}
-          addGymLocation={addGymLocation}
-          lngLat={lngLat}
-          onMove={(evt) => setViewState(evt.viewState)}
-          showForm={showForm}
-          setShowForm={setShowForm}
-          visible={visible}
-          setVisible={setVisible}
-          equipmentList={equipmentList}
-          currentUser={currentUser}
-        ></Map>
+        <Box sx={{ border: 3, borderColor: 'primary.main' }}>
+          <Map
+            viewState={viewState}
+            setViewState={setViewState}
+            marker={marker}
+            setMarker={setMarker}
+            gymLocations={gymLocations}
+            addGymLocation={addGymLocation}
+            lngLat={lngLat}
+            onMove={(evt) => setViewState(evt.viewState)}
+            showForm={showForm}
+            setShowForm={setShowForm}
+            visible={visible}
+            setVisible={setVisible}
+            equipmentList={equipmentList}
+            currentUser={currentUser}
+          ></Map>
+        </Box>
 
         {showComponent && (
           <ApproveSubmissions
@@ -271,8 +282,10 @@ function App() {
             handleApproval={handleApproval}
           ></ApproveSubmissions>
         )}
-        <Footer />
       </Container>
+      <Box sx={{ padding: 1.2, color: 'primary.contrastText' }}>
+        <Footer />
+      </Box>
     </>
   )
 }

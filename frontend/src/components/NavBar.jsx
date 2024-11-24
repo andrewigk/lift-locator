@@ -21,7 +21,7 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
       <div>
         {currentUser.role === 'admin' ? (
           <Button
-            variant="outlined"
+            variant="contained"
             size="medium"
             onClick={() => showSubmissions()}
             sx={{ fontWeight: '600', marginRight: '.5rem' }}
@@ -33,7 +33,7 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
         )}
         {currentUser.username ? (
           <Button
-            variant="outlined"
+            variant="contained"
             size="medium"
             sx={{ fontWeight: '600' }}
             onClick={() => logOut()}
@@ -42,11 +42,19 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
           </Button>
         ) : (
           <Button
-            variant="outlined"
+            variant="contained"
             size="medium"
             onClick={() => googleLogin()}
             startIcon={<GoogleIcon />}
-            sx={{ fontWeight: '600' }}
+            sx={{
+              fontWeight: '600',
+              backgroundColor: '#eaeaea',
+              color: '#292929',
+              '&:hover': {
+                backgroundColor: '#d6d4d4', // Background color on hover
+                // Optional: Change text color on hover
+              },
+            }}
           >
             Sign Up or Sign In with Google
           </Button>
