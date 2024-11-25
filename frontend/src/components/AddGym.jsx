@@ -1,6 +1,23 @@
 /* eslint-disable react/prop-types */
 
 import EquipmentSelect from './EquipmentSelect.jsx'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
+import FormControl from '@mui/material/FormControl'
+import Checkbox from '@mui/material/Checkbox'
+
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
+import Tooltip from '@mui/material/Tooltip'
 
 import { useEffect } from 'react'
 const AddGym = ({
@@ -8,8 +25,10 @@ const AddGym = ({
   lngLat,
   gym,
   setGym,
-  modalRef,
+
   equipmentList,
+  open,
+  handleClose,
 }) => {
   // Update gym latitude and longitude when lngLat changes
   useEffect(() => {
@@ -31,6 +50,17 @@ const AddGym = ({
   ]
 
   const condition = ['excellent', 'good', 'fair', 'worn', 'needs repair']
+
+  const formClear = () => {
+    setGym({
+      ...gym,
+      name: '',
+      category: '',
+      inventory: [],
+      hasKilos: false,
+      contactInfo: { name: null, phoneNumber: null, email: null },
+    })
+  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -91,165 +121,243 @@ const AddGym = ({
   }
 
   return (
-    <div
-      ref={modalRef}
-      className="formContainer"
-      style={{
-        position: 'fixed',
-        left: '50%',
-        top: '50%',
-        transform: 'translate(-50%,-50%)',
-        overflowY: 'auto' /* Enable vertical scrolling */,
-        maxHeight: '90vh',
-        maxWidth: '100%',
-        zIndex: 10,
-        border: '1px solid var(--c-input-border)',
-        backgroundColor: 'rgba(36, 36, 36, 0.9)',
-      }}
-    >
-      <form onSubmit={handleSubmitGym}>
-        <h2>Add a gym listing</h2>
-
-        <div className="formRow">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            className="gymName"
-            value={gym.name || ''}
-            onChange={handleChange}
-          ></input>
-        </div>
-        <div className="formRow">
-          <label htmlFor="categories">Category/Niche</label>
-          <select
-            name="category"
-            className="categories"
-            value={gym.category || ''}
-            onChange={handleChange}
-          >
-            <option value="">Select...</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="formRow">
-          {gym.category === 'powerlifting' ||
-          gym.category === 'weightlifting' ? (
-            <div className="hasKilos">
-              <h4>Has KG plates?</h4>
-              <input
-                type="checkbox"
-                id="hasKilos"
-                name="hasKilos"
-                checked={gym.hasKilos}
-                onChange={handleChange}
-              ></input>
-            </div>
-          ) : (
-            ''
-          )}
-        </div>
-        <div className="inventoryRow">
-          <h2>Add Inventory</h2>{' '}
-          {gym.inventory.map((item, index) => (
-            <div className="inventoryItem" key={index}>
-              <EquipmentSelect
-                index={index}
-                equipmentList={equipmentList}
-                value={item.equipment || ''}
-                handleInventoryChange={handleInventoryChange}
-              />
-              <input
-                type="text"
-                size="3"
-                className="count"
-                placeholder="Count"
-                value={item.count || ''}
-                onChange={(e) =>
-                  handleInventoryChange(index, 'count', e.target.value)
-                }
-              />
-              <select
-                value={item.condition || ''}
-                className="condition"
-                onChange={(e) =>
-                  handleInventoryChange(index, 'condition', e.target.value)
-                }
-              >
-                <option value="">Condition...</option>
-                {condition.map((specCon, index) => {
-                  return (
-                    <option value={specCon} key={index}>
-                      {specCon}
-                    </option>
-                  )
-                })}
-              </select>
-
-              <input
-                type="text"
-                id="comment"
-                name="comment"
-                size="40"
-                className="comment"
-                placeholder="Additional comments..."
-                value={item.comment || ''}
-                onChange={(e) =>
-                  handleInventoryChange(index, 'comment', e.target.value)
-                }
-              />
-            </div>
-          ))}
-        </div>
-        <div>
-          <button type="button" onClick={addInventorySelect}>
-            {gym.inventory.length === 0 ? 'Add an item' : 'Add another item'}
-          </button>
-        </div>
-        <div>
-          <h2>Contact Information</h2>
-          <div className="formRow">
-            <label htmlFor="contactName">Primary Contact</label>
-            <input
+    <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        sx={{
+          '& .MuiDialog-paper': {
+            maxWidth: 'md',
+          },
+        }}
+      >
+        <DialogTitle>Add a Gym Listing</DialogTitle>
+        <form onSubmit={handleSubmitGym}>
+          <DialogContent>
+            <DialogContentText>
+              Enter all related data in the form. The more thorough and accurate
+              the information is, the better.
+            </DialogContentText>
+            <TextField
+              required
+              id="name"
+              name="name"
+              label="Gym name"
               type="text"
+              value={gym.name || ''}
+              fullWidth
+              onChange={handleChange}
+              variant="outlined"
+              margin="dense"
+            />
+
+            <FormControl required variant="outlined" fullWidth margin="dense">
+              <InputLabel>Category/Niche</InputLabel>
+              <Select
+                name="category"
+                value={gym.category || ''}
+                onChange={handleChange}
+                label="Category"
+                // This label will now correctly associate with InputLabel
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category} value={category}>
+                    {category}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <div>
+              {gym.category === 'powerlifting' ||
+              gym.category === 'weightlifting' ? (
+                <FormControlLabel
+                  required
+                  control={
+                    <Checkbox
+                      id="hasKilos"
+                      name="hasKilos"
+                      checked={gym.hasKilos}
+                      onChange={handleChange}
+                      size="small"
+                      sx={{
+                        color: 'secondary.main',
+                        '&.Mui-checked': {
+                          color: 'secondary.main',
+                        },
+                      }}
+                    />
+                  }
+                  label="Has KG Plates?"
+                ></FormControlLabel>
+              ) : (
+                ''
+              )}
+            </div>
+
+            <TextField
+              type="text"
+              variant="outlined"
               id="contactName"
+              margin="dense"
+              fullWidth
+              label="Primary Contact's Name"
               name="contactInfo.name"
               value={gym.contactInfo.name || ''}
               onChange={handleChange}
-            ></input>
-          </div>
-          <div className="formRow">
-            <label htmlFor="contactPhone">Phone Number</label>
-            <input
+            ></TextField>
+
+            <TextField
               type="text"
+              fullWidth
+              margin="dense"
+              variant="outlined"
+              label="Primary Contact Phone Number"
               id="contactPhone"
               name="contactInfo.phoneNumber"
               value={gym.contactInfo.phoneNumber || ''}
               onChange={handleChange}
-            ></input>
-          </div>
-          <div className="formRow">
-            <label htmlFor="contactEmail">Contact Email</label>
-            <input
+            ></TextField>
+
+            <TextField
               type="text"
+              fullWidth
+              margin="dense"
+              variant="outlined"
+              label="Primary Contact Email Address"
               id="contactEmail"
               name="contactInfo.email"
               value={gym.contactInfo.email || ''}
               onChange={handleChange}
-            ></input>
-          </div>
-        </div>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-        <pre>{JSON.stringify(gym, null, 2)}</pre>
-      </form>
-    </div>
+            ></TextField>
+
+            <Stack
+              direction="row"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexWrap: 'wrap',
+                gap: 0,
+                marginTop: '10px',
+              }}
+            >
+              {gym.inventory.map((item, index) => (
+                <Box
+                  className="inventoryItem"
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                    flexWrap: 'wrap',
+                    maxWidth: '800px',
+                    justifyContent: 'start',
+                  }}
+                >
+                  {/* Equipment Selector */}
+                  <EquipmentSelect
+                    index={index}
+                    equipmentList={equipmentList}
+                    value={item.equipment || ''}
+                    handleInventoryChange={handleInventoryChange}
+                  />
+
+                  {/* Count Field */}
+                  <TextField
+                    type="text"
+                    label="Count"
+                    name="count"
+                    id="count"
+                    title="Count (stock) of item"
+                    required
+                    size="small"
+                    variant="outlined"
+                    value={item.count || ''}
+                    onChange={(e) =>
+                      handleInventoryChange(index, 'count', e.target.value)
+                    }
+                    sx={{ flex: '0 1 15%' }}
+                  />
+
+                  {/* Condition Dropdown */}
+                  <FormControl
+                    required
+                    variant="outlined"
+                    size="small"
+                    sx={{ flex: '0 1 20%', margin: 0 }}
+                  >
+                    <InputLabel>Condition</InputLabel>
+                    <Select
+                      name="condition"
+                      label="Condition"
+                      title="Condition"
+                      value={item.condition || ''}
+                      onChange={(e) =>
+                        handleInventoryChange(
+                          index,
+                          'condition',
+                          e.target.value
+                        )
+                      }
+                    >
+                      {condition.map((specCon, index) => (
+                        <MenuItem value={specCon} key={index}>
+                          {specCon}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  {/* Comment Field */}
+                  <TextField
+                    type="text"
+                    label="Comments"
+                    name="comment"
+                    id="comment"
+                    title="Additional comments and details about the item"
+                    variant="outlined"
+                    size="small"
+                    value={item.comment || ''}
+                    onChange={(e) =>
+                      handleInventoryChange(index, 'comment', e.target.value)
+                    }
+                    sx={{ flex: 1 }}
+                  />
+                </Box>
+              ))}
+            </Stack>
+            <div style={{ marginTop: '10px' }}>
+              <Tooltip title="Click to begin adding entries to the gym inventory or add additional entries.">
+                <Button
+                  type="button"
+                  variant="contained"
+                  size="medium"
+                  onClick={addInventorySelect}
+                >
+                  {gym.inventory.length === 0
+                    ? 'Add an item to inventory'
+                    : 'Add another item'}
+                </Button>
+              </Tooltip>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Tooltip title="Clears all data for the current location selected.">
+              <Button onClick={formClear} color="primary" variant="contained">
+                Clear
+              </Button>
+            </Tooltip>
+            <Button onClick={handleClose} color="primary" variant="contained">
+              Cancel
+            </Button>
+            <Tooltip title="Submit listing, pending approval by admin.">
+              <Button type="submit" color="primary" variant="contained">
+                Submit
+              </Button>
+            </Tooltip>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </>
   )
 }
 export default AddGym

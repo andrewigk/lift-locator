@@ -33,21 +33,22 @@ code {
 }
 
 /* Targeting the main geocoder control */
-.maplibregl-ctrl-top-left .maplibregl-ctrl-geocoder {
-  width: 500px; /* Set the width for the geocoder control */
+.maplibregl-ctrl-geocoder {
+  max-width: 250px;
 }
 
 /* Ensure the input field uses full width */
-.maplibregl-ctrl-geocoder--input {
+.maplibregl-ctrl-geocoder.maplibregl-ctrl {
   width: 100%; /* Ensure input field uses full width */
+}
+
+.maplibregl-ctrl-geocoder--icon,
+.maplibregl-ctrl-geocoder--icon-search {
+  max-width: 30px;
+  max-height: 30px;
 }
 
 /* Adjust suggestions wrapper to match the control width */
 .suggestions-wrapper {
   width: 100%; /* Change to 100% to ensure it takes the full width of the geocoder */
-}
-
-/* Optional: Ensure parent container has proper width */
-.maplibregl-ctrl {
-  width: 100%; /* Allow parent control to fill width */
 }

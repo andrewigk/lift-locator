@@ -1,21 +1,23 @@
 import { FaInstagram } from 'react-icons/fa6'
+import IconButton from '@mui/material/IconButton'
 
 const Footer = () => {
   return (
     <div className="footer">
       <div className="footer-title">
-        <h4>Andrew Kim © 2024</h4>
+        <h5>Andrew Kim © 2024</h5>
       </div>
       <div className="footer-details">
-        <h4>Contact</h4>
-        <a
+        <h5>Contact</h5>
+
+        <IconButton
           href="https://www.instagram.com/glutes83kg"
           target="_blank"
           rel="noopener noreferrer"
-          className="instagram"
+          size="small"
         >
-          <FaInstagram size={20} />
-        </a>
+          <FaInstagram />
+        </IconButton>
       </div>
     </div>
   )
