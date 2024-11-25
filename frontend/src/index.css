@@ -5,11 +5,6 @@
   background-color: #242424;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar {
@@ -84,6 +79,28 @@ label {
   display: block;
 }
 
+/*
+.maplibregl-ctrl {
+  width: 100% !important;
+  height: 100%;
+}
+
+.maplibregl-ctrl-geocoder {
+  width: 80px !important;
+  height: 30% !important;
+}
+
+.maplibregl-ctrl-geocoder--icon,
+.maplibregl-ctrl-geocoder--icon-search {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.maplibregl-ctrl-geocoder--input {
+  font-size: 12px;
+}
+  */
+
 .formContainer {
   width: 40vw;
   max-width: 600px;
@@ -126,8 +143,10 @@ label {
 
 .popup {
   color: black;
-  max-width: 20vw;
-  max-height: 35vh;
+  max-width: 400px;
+  max-height: 300px;
+  min-width: 200px;
+  min-height: 100px;
   padding: 1em;
   border-radius: 4px;
   overflow-y: auto;
@@ -173,13 +192,12 @@ label {
 .footer {
   display: flex;
   justify-content: space-between;
-  margin-top: 1em;
 }
 
 .footer-details {
   display: flex;
-
-  gap: 1em;
+  align-items: center;
+  gap: 5px;
 }
 
 .instagram {

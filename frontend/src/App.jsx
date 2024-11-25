@@ -230,61 +230,100 @@ function App() {
   return (
     <>
       <ToastContainer position="top-center" autoClose={2500} theme="light" />
+      <Box
+        sx={{
+          bgColor: 'background.default',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '90vw',
+          minHeight: '100vh',
 
-      <Container maxWidth="1600px" sx={{ boxShadow: 4 }} disableGutters="true">
-        <Box
+          maxWidth: {
+            md: '50vw', // On medium screens, max width is 80% of the viewport
+            lg: '60vw', // On large screens, max width is 70% of the viewport
+          },
+        }}
+      >
+        <Container
           sx={{
-            padding: 1,
-            color: 'primary.contrastText',
+            backgroundColor: 'background.paper',
           }}
+          disableGutters="true"
         >
-          <NavBar
-            currentUser={currentUser}
-            googleLogin={googleLogin}
-            logOut={logOut}
-            showSubmissions={showSubmissions}
-          ></NavBar>
-        </Box>
-        {visible && (
-          <AddGym
-            gym={gym}
-            setGym={setGym}
-            handleSubmitGym={handleSubmitGym}
-            gymLocations={gymLocations}
-            setGymLocations={setGymLocations}
-            lngLat={lngLat}
-            modalRef={modalRef}
-            equipmentList={equipmentList}
-          ></AddGym>
-        )}
-        <Box sx={{ border: 3, borderColor: 'primary.main' }}>
-          <Map
-            viewState={viewState}
-            setViewState={setViewState}
-            marker={marker}
-            setMarker={setMarker}
-            gymLocations={gymLocations}
-            addGymLocation={addGymLocation}
-            lngLat={lngLat}
-            onMove={(evt) => setViewState(evt.viewState)}
-            showForm={showForm}
-            setShowForm={setShowForm}
-            visible={visible}
-            setVisible={setVisible}
-            equipmentList={equipmentList}
-            currentUser={currentUser}
-          ></Map>
-        </Box>
+          <Paper
+            sx={{
+              padding: 2,
+              paddingTop: 2,
+              paddingBottom: 1,
+              margin: 3,
+              marginTop: 2,
+              marginBottom: 1.5,
+              color: 'primary.contrastText',
+            }}
+            elevation={4}
+          >
+            <NavBar
+              currentUser={currentUser}
+              googleLogin={googleLogin}
+              logOut={logOut}
+              showSubmissions={showSubmissions}
+            ></NavBar>
+          </Paper>
 
-        {showComponent && (
-          <ApproveSubmissions
-            submissions={submissions}
-            handleApproval={handleApproval}
-          ></ApproveSubmissions>
-        )}
-      </Container>
-      <Box sx={{ padding: 1.2, color: 'primary.contrastText' }}>
-        <Footer />
+          <Box
+            sx={{
+              padding: 3,
+              paddingTop: 0,
+              paddingBottom: 0,
+              marginBottom: 1,
+            }}
+          >
+            {visible && (
+              <AddGym
+                gym={gym}
+                setGym={setGym}
+                handleSubmitGym={handleSubmitGym}
+                gymLocations={gymLocations}
+                setGymLocations={setGymLocations}
+                lngLat={lngLat}
+                modalRef={modalRef}
+                equipmentList={equipmentList}
+              ></AddGym>
+            )}
+
+            <Map
+              viewState={viewState}
+              setViewState={setViewState}
+              marker={marker}
+              setMarker={setMarker}
+              gymLocations={gymLocations}
+              addGymLocation={addGymLocation}
+              lngLat={lngLat}
+              onMove={(evt) => setViewState(evt.viewState)}
+              showForm={showForm}
+              setShowForm={setShowForm}
+              visible={visible}
+              setVisible={setVisible}
+              equipmentList={equipmentList}
+              currentUser={currentUser}
+            ></Map>
+          </Box>
+
+          {showComponent && (
+            <ApproveSubmissions
+              submissions={submissions}
+              handleApproval={handleApproval}
+            ></ApproveSubmissions>
+          )}
+          <Box
+            sx={{
+              padding: 1,
+              color: 'primary.contrastText',
+            }}
+          >
+            <Footer />
+          </Box>
+        </Container>
       </Box>
     </>
   )

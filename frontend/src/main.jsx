@@ -14,8 +14,8 @@ const clientId = import.meta.env.VITE_CLIENT_ID
 const theme = createTheme({
   palette: {
     background: {
-      default: '#f9f9f9',
-      paper: '#d0d0d0',
+      default: '#fafafa',
+      paper: '#fff',
     },
     mode: 'light',
     primary: {

@@ -24,7 +24,16 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
             variant="contained"
             size="medium"
             onClick={() => showSubmissions()}
-            sx={{ fontWeight: '600', marginRight: '.5rem' }}
+            sx={{
+              fontWeight: '600',
+              marginRight: '.5rem',
+              backgroundColor: '#F3F3F3',
+              color: '#292929',
+              '&:hover': {
+                backgroundColor: '#eaeaea',
+                color: '#f35c91',
+              },
+            }}
           >
             Submissions
           </Button>
@@ -35,7 +44,15 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
           <Button
             variant="contained"
             size="medium"
-            sx={{ fontWeight: '600' }}
+            sx={{
+              fontWeight: '600',
+              backgroundColor: '#F3F3F3',
+              color: '#292929',
+              '&:hover': {
+                backgroundColor: '#eaeaea',
+                color: '#f35c91',
+              },
+            }}
             onClick={() => logOut()}
           >
             Sign Out
@@ -48,15 +65,15 @@ const NavBar = ({ currentUser, googleLogin, logOut, showSubmissions }) => {
             startIcon={<GoogleIcon />}
             sx={{
               fontWeight: '600',
-              backgroundColor: '#eaeaea',
+              backgroundColor: '#F3F3F3',
               color: '#292929',
               '&:hover': {
-                backgroundColor: '#d6d4d4', // Background color on hover
-                // Optional: Change text color on hover
+                backgroundColor: '#eaeaea',
+                color: '#f35c91',
               },
             }}
           >
-            Sign Up or Sign In with Google
+            Register/Log-in
           </Button>
         )}
       </div>

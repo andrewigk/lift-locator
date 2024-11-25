@@ -61,7 +61,7 @@ const GymMarker = ({ gymLocations, equipmentList }) => {
   return (
     <div>
       {gymLocations.map((gym, index) => {
-        const popup = new maplibregl.Popup()
+        const popup = new maplibregl.Popup({ offset: [0, 10] })
           .setLngLat([gym.longitude, gym.latitude])
           .setHTML(
             `<div class="popup">

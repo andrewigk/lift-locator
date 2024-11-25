@@ -3,6 +3,7 @@
 import MapLibre, { NavigationControl, useMap } from 'react-map-gl/maplibre'
 import GymMarker from './GymMarker.jsx'
 import GeoControl from './GeoControl.jsx'
+import Box from '@mui/material/Box'
 
 const Map = ({
   viewState,
@@ -18,14 +19,24 @@ const Map = ({
   const apiUrl = import.meta.env.VITE_MAP_STYLE
 
   return (
-    <div className="mapContainer">
+    <Box
+      sx={{
+        boxShadow: 6,
+      }}
+    >
       <MapLibre
         initialViewState={{
           longitude: longitude,
           latitude: latitude,
           zoom: zoom,
         }}
-        style={{ width: 900, height: 600 }}
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          minWidth: '450px',
+          minHeight: '800px',
+        }}
         mapStyle={apiUrl}
         dragRotate={false}
         onClick={(event) => console.log(event)}
@@ -39,7 +50,7 @@ const Map = ({
         <NavigationControl />
         <GymMarker gymLocations={gymLocations} equipmentList={equipmentList} />
       </MapLibre>
-    </div>
+    </Box>
   )
 }
 export default Map
