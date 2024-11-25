@@ -142,7 +142,7 @@ label {
 }
 
 .popup {
-  color: black;
+  color: rgba(32, 32, 32, 0.87);
   max-width: 400px;
   max-height: 300px;
   min-width: 200px;
@@ -152,6 +152,22 @@ label {
   overflow-y: auto;
 }
 
+#addGymButton {
+  background-color: #f3f3f3;
+  color: #292929;
+  font-weight: 600;
+  margin-top: 10px;
+  border: none; /* Removes the border */
+  border-radius: 4px; /* Adds a slight rounded edge */
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Adds smooth animations */
+  padding: 10px 20px; /* Adds padding for a button look */
+}
+
+#addGymButton:hover {
+  background-color: #eaeaea;
+  color: #f35c91;
+}
 .popup-content {
   display: flex;
   flex-direction: column;
@@ -178,7 +194,7 @@ label {
 }
 
 .equipment-item-heading {
-  font-weight: bolder;
+  font-weight: bolderz;
 }
 .equipment-condition-count {
   display: flex;

@@ -5,9 +5,9 @@ import AddGym from './components/AddGym.jsx'
 import Footer from './components/Footer.jsx'
 import ApproveSubmissions from './components/ApproveSubmissions.jsx'
 import { useGoogleLogin } from '@react-oauth/google'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useClickOutside } from '@reactuses/core'
+
 import Container from '@mui/material/Container'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -59,13 +59,16 @@ function App() {
 
   const [equipmentList, setEquipmentList] = useState([])
 
-  const [visible, setVisible] = useState(false)
+  //Trying DialogForm from MUI here:
+  const [open, setOpen] = useState(false)
 
-  const modalRef = useRef(null)
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
 
-  useClickOutside(modalRef, () => {
-    setVisible(false)
-  })
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   const showSubmissions = () => {
     fetchSubmissions()
@@ -131,33 +134,38 @@ function App() {
         ...gym,
         submittedBy: currentUser.oauthId,
       }
-      const res = await axios.post(
-        'http://localhost:5000/api/gyms/submit/',
-        gymData
-      )
-      if (res.status === 201) {
-        console.log('Gym submitted successfully.')
-        toast.success(
-          'Gym submitted successfully. Listing is pending admin approval.'
+      try {
+        const res = await axios.post(
+          'http://localhost:5000/api/gyms/submit/',
+          gymData
         )
-        setGym({
-          name: '',
-          category: '',
-          inventory: [],
-          hasKilos: false,
-          contactInfo: { name: null, phoneNumber: null, email: null },
-          // latitude and longitude should be passed by props when the marker is interacted with
-          latitude: '',
-          longitude: '',
-        })
-        setVisible(false)
+        if (res.status === 201) {
+          console.log('Gym submitted successfully.')
+          toast.success(
+            'Gym submitted successfully. Listing is pending admin approval.'
+          )
+          setGym({
+            name: '',
+            category: '',
+            inventory: [],
+            hasKilos: false,
+            contactInfo: { name: null, phoneNumber: null, email: null },
+            // latitude and longitude should be passed by props when the marker is interacted with
+            latitude: '',
+            longitude: '',
+          })
+          handleClose()
 
-        await fetchSubmissions()
+          await fetchSubmissions()
+        }
+      } catch (e) {
+        console.log('Error with form submission, missing fields: ', e)
+        toast.error(
+          'Error with submission. Please check that required fields are filled accurately.'
+        )
       }
     } else {
-      toast.error(
-        'Error with submission. Please check your form details and ensure you are logged in.'
-      )
+      toast.error('Error with submission. Please ensure you are logged in.')
     }
   }
 
@@ -258,7 +266,6 @@ function App() {
               margin: 3,
               marginTop: 2,
               marginBottom: 1.5,
-              color: 'primary.contrastText',
             }}
             elevation={4}
           >
@@ -278,18 +285,18 @@ function App() {
               marginBottom: 1,
             }}
           >
-            {visible && (
-              <AddGym
-                gym={gym}
-                setGym={setGym}
-                handleSubmitGym={handleSubmitGym}
-                gymLocations={gymLocations}
-                setGymLocations={setGymLocations}
-                lngLat={lngLat}
-                modalRef={modalRef}
-                equipmentList={equipmentList}
-              ></AddGym>
-            )}
+            <AddGym
+              gym={gym}
+              setGym={setGym}
+              handleSubmitGym={handleSubmitGym}
+              gymLocations={gymLocations}
+              setGymLocations={setGymLocations}
+              lngLat={lngLat}
+              equipmentList={equipmentList}
+              open={open}
+              handleClickOpen={handleClickOpen}
+              handleClose={handleClose}
+            ></AddGym>
 
             <Map
               viewState={viewState}
@@ -302,10 +309,11 @@ function App() {
               onMove={(evt) => setViewState(evt.viewState)}
               showForm={showForm}
               setShowForm={setShowForm}
-              visible={visible}
-              setVisible={setVisible}
               equipmentList={equipmentList}
               currentUser={currentUser}
+              open={open}
+              handleClickOpen={handleClickOpen}
+              handleClose={handleClose}
             ></Map>
           </Box>
 
@@ -318,7 +326,6 @@ function App() {
           <Box
             sx={{
               padding: 1,
-              color: 'primary.contrastText',
             }}
           >
             <Footer />

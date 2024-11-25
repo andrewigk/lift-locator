@@ -13,6 +13,9 @@ const Map = ({
   setVisible,
   equipmentList,
   currentUser,
+  open,
+  handleClickOpen,
+  handleClose,
 }) => {
   const { longitude, latitude, zoom } = viewState
 
@@ -46,6 +49,9 @@ const Map = ({
           lngLat={lngLat}
           setVisible={setVisible}
           currentUser={currentUser}
+          open={open}
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
         ></GeoControl>
         <NavigationControl />
         <GymMarker gymLocations={gymLocations} equipmentList={equipmentList} />

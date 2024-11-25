@@ -7,7 +7,7 @@ import maplibregl from 'maplibre-gl'
 import '../App.css'
 import { toast } from 'react-toastify'
 
-const GeoControl = ({ currentUser, addGymLocation, setVisible }) => {
+const GeoControl = ({ currentUser, addGymLocation, handleClickOpen }) => {
   const { current: map } = useMap()
 
   const handleClick = (event) => {
@@ -16,11 +16,10 @@ const GeoControl = ({ currentUser, addGymLocation, setVisible }) => {
       if (currentUser && currentUser.oauthId) {
         const gymData = event.target.getAttribute('data-gym-data')
         if (gymData) {
-          //setShowForm(!showForm)
-          setVisible(true)
+          handleClickOpen()
+
           // Pass the gym data (as JSON or as needed) to the addGymLocation function
           addGymLocation(gymData)
-          // addGymLocation(JSON.parse(gymData))
         }
       } else {
         toast.error('You must be signed in to submit a gym listing.')
@@ -108,8 +107,21 @@ const GeoControl = ({ currentUser, addGymLocation, setVisible }) => {
         },
         popupRender: (item) => {
           console.log(item.geometry.coordinates)
-          // Customize your HTML here
-          return `<div id="popup" class="popup"><h4>${item.place_name}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>Add a gym listing here</button></div>`
+          const houseNumber = item.properties.address?.house_number || ''
+          const addressParts = [
+            item.properties.address?.road || '',
+            item.properties.address?.city || '',
+            item.properties.address?.state || '',
+            item.properties.address?.country || '',
+            item.properties.address?.postcode || '',
+          ]
+
+          const formattedAddress =
+            houseNumber + ' ' + addressParts.filter(Boolean).join(', ')
+
+          const popupHTML = `<div id="popup" class="popup"><h4>${formattedAddress}</h4><button id="addGymButton" data-gym-data='${item.geometry.coordinates}'>ADD A GYM LISTING</button></div>`
+
+          return popupHTML
         },
       }
 

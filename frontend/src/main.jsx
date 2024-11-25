@@ -21,16 +21,16 @@ const theme = createTheme({
     primary: {
       main: '#36bed8',
       dark: '#2a8a9a',
-      contrastText: '#232323',
+      contrastText: '#fff',
     },
     secondary: {
       main: '#f35c91',
       dark: '#a63e62',
-      contrastText: '#232323',
+      contrastText: '#fff',
     },
     text: {
-      primary: 'rgba(243,243,243,0.87)',
-      secondary: 'rgba(14,14,14,0.6)',
+      primary: 'rgba(32,32,32,0.87)',
+      secondary: 'rgba(63,63,63,0.53)',
     },
   },
 })
