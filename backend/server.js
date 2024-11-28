@@ -7,6 +7,7 @@ const session = require('express-session')
 const crypto = require('crypto')
 const RedisStore = require('connect-redis').default
 const redis = require('./redis.js')
+const rateLimit = require('express-rate-limit')
 
 dotenv.config()
 
@@ -15,21 +16,26 @@ const app = express()
 
 const sessionSecret = crypto.randomBytes(32).toString('hex')
 
-// Initialize store.
-/* let redisStore = new RedisStore({
-  client: redisClient,
-  prefix: 'myapp:',
-  legacyMode: true,
-}) */
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Redis, Memcached, etc. See below.
+})
 
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://lift-locator.vercel.app/'],
     credentials: true,
   })
 )
 app.use(express.json())
+
+app.use(limiter)
+
+app.set('trust proxy', 1)
 
 app.use(
   session({
@@ -43,6 +49,7 @@ app.use(
     cookie: {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
+      secure: true,
     },
   })
 )

@@ -75,12 +75,17 @@ function App() {
     setShowComponent(!showComponent)
   }
 
+  const apiUrl =
+    import.meta.env.MODE === 'production'
+      ? import.meta.env.VITE_API_DEPLOYED
+      : import.meta.env.VITE_API_LOCAL
+
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
       console.log('Sending payload: ', codeResponse.code)
       const res = await axios.post(
-        'http://localhost:5000/api/users/auth/google/',
+        `${apiUrl}/api/users/auth/google/`,
         {
           code: codeResponse.code,
         },
@@ -107,7 +112,7 @@ function App() {
 
   const logOut = async () => {
     const res = await axios.post(
-      'http://localhost:5000/api/users/auth/logout/',
+      `${apiUrl}/api/users/auth/logout/`,
       {},
       { withCredentials: true }
     )
@@ -135,10 +140,7 @@ function App() {
         submittedBy: currentUser.oauthId,
       }
       try {
-        const res = await axios.post(
-          'http://localhost:5000/api/gyms/submit/',
-          gymData
-        )
+        const res = await axios.post(`${apiUrl}/api/gyms/submit/`, gymData)
         if (res.status === 201) {
           console.log('Gym submitted successfully.')
           toast.success(
@@ -171,7 +173,7 @@ function App() {
 
   const fetchEquipment = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/gyms/equipment')
+      const res = await axios.get(`${apiUrl}/api/gyms/equipment`)
       setEquipmentList(res.data)
       console.log(res)
     } catch (error) {
@@ -181,9 +183,7 @@ function App() {
   const fetchSubmissions = async () => {
     try {
       if (currentUser.role === 'admin') {
-        const res = await axios.get(
-          'http://localhost:5000/api/gyms/submissions'
-        )
+        const res = await axios.get(`${apiUrl}/api/gyms/submissions`)
         setSubmissions(res.data)
       }
     } catch (error) {
@@ -193,7 +193,7 @@ function App() {
 
   const fetchApprovals = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/gyms/')
+      const res = await axios.get(`${apiUrl}/api/gyms/`)
       console.log(res)
       setGymLocations(res.data)
     } catch (error) {
@@ -203,7 +203,7 @@ function App() {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users/me', {
+      const res = await axios.get(`${apiUrl}/api/users/me`, {
         withCredentials: true,
       })
       console.log(res)
@@ -216,10 +216,7 @@ function App() {
   const handleApproval = async (req) => {
     try {
       console.log(req)
-      const res = await axios.post(
-        'http://localhost:5000/api/gyms/approve',
-        req
-      )
+      const res = await axios.post(`${apiUrl}/api/gyms/approve`, req)
       if (res.status === 201) {
         console.log('Gym approved successfully.')
         await fetchSubmissions()
