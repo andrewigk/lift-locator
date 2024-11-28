@@ -9,6 +9,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+
 const clientId = import.meta.env.VITE_CLIENT_ID
 
 const theme = createTheme({
