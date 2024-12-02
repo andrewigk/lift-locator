@@ -24,13 +24,15 @@ const limiter = rateLimit({
   // store: ... , // Redis, Memcached, etc. See below.
 })
 
+const deployedUrl = process.env.DEPLOY_URL
+
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
   cors({
     origin: [
       'http://localhost:5173',
       'https://lift-locator.vercel.app',
-      'https://lift-locator-ffdpkg0f7-andrewigks-projects.vercel.app',
+      deployedUrl,
     ],
     credentials: true,
   })
