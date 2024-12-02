@@ -13,6 +13,9 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
 
 function App() {
   const [viewState, setViewState] = useState({
@@ -59,6 +62,8 @@ function App() {
 
   const [equipmentList, setEquipmentList] = useState([])
 
+  const [loadingOpen, setLoadingOpen] = useState(false)
+
   //Trying DialogForm from MUI here:
   const [open, setOpen] = useState(false)
 
@@ -84,6 +89,7 @@ function App() {
     flow: 'auth-code',
     onSuccess: async (codeResponse) => {
       console.log('Sending payload: ', codeResponse.code)
+
       const res = await axios.post(
         `${apiUrl}/api/users/auth/google/`,
         {
@@ -192,10 +198,12 @@ function App() {
   }
 
   const fetchApprovals = async () => {
+    setLoadingOpen(true)
     try {
       const res = await axios.get(`${apiUrl}/api/gyms/`)
       console.log(res)
       setGymLocations(res.data)
+      setLoadingOpen(false)
     } catch (error) {
       console.error('Error fetching approvals:', error)
     }
@@ -249,6 +257,25 @@ function App() {
           },
         }}
       >
+        {loadingOpen && (
+          <Backdrop
+            sx={(theme) => ({
+              color: '#fff',
+              zIndex: theme.zIndex.drawer + 1,
+              display: 'flex',
+              flexDirection: 'column',
+            })}
+            open={loadingOpen}
+            onClick={() => {
+              setLoadingOpen(false)
+            }}
+          >
+            <CircularProgress color="inherit" />
+            <Typography variant="p" sx={{ marginTop: 2 }}>
+              Loading gyms from database...
+            </Typography>
+          </Backdrop>
+        )}
         <Container
           sx={{
             backgroundColor: 'background.paper',
