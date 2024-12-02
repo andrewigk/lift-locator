@@ -27,7 +27,11 @@ const limiter = rateLimit({
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://lift-locator.vercel.app/'],
+    origin: [
+      'http://localhost:5173',
+      'https://lift-locator.vercel.app',
+      'https://lift-locator-hueisksdi-andrewigks-projects.vercel.app/',
+    ],
     credentials: true,
   })
 )
