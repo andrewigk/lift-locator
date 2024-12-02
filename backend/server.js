@@ -30,7 +30,7 @@ app.use(
     origin: [
       'http://localhost:5173',
       'https://lift-locator.vercel.app',
-      'https://lift-locator-hueisksdi-andrewigks-projects.vercel.app/',
+      'https://lift-locator-ffdpkg0f7-andrewigks-projects.vercel.app',
     ],
     credentials: true,
   })
