@@ -11,8 +11,6 @@ services:
       CLIENT_SECRET: ${CLIENT_SECRET}
       REDIRECT_URL: ${REDIRECT_URL}
       REDIS_URL: ${REDIS_URL}
-    ports:
-      - "5000:5000"
     networks:
       - app-network
 
