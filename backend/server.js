@@ -26,6 +26,14 @@ const limiter = rateLimit({
 
 const deployedUrl = process.env.DEPLOY_URL
 
+redis.on('connect', () => {
+  console.log('Connected to Redis!');
+});
+
+redis.on('error', (err) => {
+  console.log('Redis error:', err);
+});
+
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
   cors({
@@ -47,7 +55,6 @@ app.use(
   session({
     store: new RedisStore({
       client: redis,
-      legacyMode: true,
     }),
     secret: sessionSecret,
     resave: false,
