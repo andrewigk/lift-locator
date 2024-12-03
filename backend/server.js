@@ -55,6 +55,7 @@ app.use(
   session({
     store: new RedisStore({
       client: redis,
+      legacyMode: true,
     }),
     secret: sessionSecret,
     resave: false,
@@ -63,6 +64,7 @@ app.use(
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       secure: true,
+      sameSite: 'None'
     },
   })
 )
