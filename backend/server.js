@@ -27,12 +27,12 @@ const limiter = rateLimit({
 const deployedUrl = process.env.DEPLOY_URL
 
 redis.on('connect', () => {
-  console.log('Connected to Redis!');
-});
+  console.log('Connected to Redis!')
+})
 
 redis.on('error', (err) => {
-  console.log('Redis error:', err);
-});
+  console.log('Redis error:', err)
+})
 
 /** Middleware to handle cross-origin resources and JSON body parsing */
 app.use(
@@ -64,7 +64,7 @@ app.use(
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       secure: true,
-      sameSite: 'None'
+      sameSite: 'None',
     },
   })
 )

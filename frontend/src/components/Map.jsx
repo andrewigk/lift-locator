@@ -37,8 +37,8 @@ const Map = ({
           position: 'relative',
           width: '100%',
           height: '100%',
-          minWidth: '450px',
-          minHeight: '800px',
+          minWidth: '300px',
+          minHeight: '600px',
         }}
         mapStyle={apiUrl}
         dragRotate={false}
