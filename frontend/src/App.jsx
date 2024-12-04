@@ -180,6 +180,7 @@ function App() {
   const fetchEquipment = async () => {
     try {
       const res = await axios.get(`${apiUrl}/api/gyms/equipment`)
+
       setEquipmentList(res.data)
       console.log(res)
     } catch (error) {
@@ -248,12 +249,13 @@ function App() {
           bgColor: 'background.default',
           display: 'flex',
           flexDirection: 'column',
-          width: '90vw',
+          width: '100vw',
           minHeight: '100vh',
-
           maxWidth: {
-            md: '50vw', // On medium screens, max width is 80% of the viewport
-            lg: '60vw', // On large screens, max width is 70% of the viewport
+            xs: '100vw',
+            sm: '80vw',
+            md: '75vw',
+            lg: '70vw',
           },
         }}
       >
@@ -280,13 +282,16 @@ function App() {
           sx={{
             backgroundColor: 'background.paper',
           }}
-          disableGutters="true"
+          disableGutters={true}
         >
           <Paper
             sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+
               padding: 2,
               paddingTop: 2,
-              paddingBottom: 1,
+              paddingBottom: 2,
               margin: 3,
               marginTop: 2,
               marginBottom: 1.5,

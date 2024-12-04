@@ -64,7 +64,7 @@ const GeoControl = ({ currentUser, addGymLocation, handleClickOpen }) => {
       const geocoderOptions = {
         maplibregl: maplibregl,
         placeholder: 'Search for a location...',
-        limit: 10,
+        limit: 5,
         marker: true,
         minLength: 5,
         popup: true,
@@ -84,9 +84,9 @@ const GeoControl = ({ currentUser, addGymLocation, handleClickOpen }) => {
             houseNumber + ' ' + addressParts.filter(Boolean).join(', ')
           return `
             <div class="geocoder-result">
-              <strong>
+              
             ${formattedAddress}
-              </strong><br>
+              <br>
               
             </div>
           `

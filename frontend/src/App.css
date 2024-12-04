@@ -34,7 +34,7 @@ code {
 
 /* Targeting the main geocoder control */
 .maplibregl-ctrl-geocoder {
-  max-width: 250px;
+  max-width: 200px;
 }
 
 /* Ensure the input field uses full width */
@@ -44,11 +44,17 @@ code {
 
 .maplibregl-ctrl-geocoder--icon,
 .maplibregl-ctrl-geocoder--icon-search {
-  max-width: 30px;
-  max-height: 30px;
+  max-width: 25px;
+  max-height: 25px;
 }
 
 /* Adjust suggestions wrapper to match the control width */
 .suggestions-wrapper {
   width: 100%; /* Change to 100% to ensure it takes the full width of the geocoder */
+}
+
+@media (max-width: 640px) {
+  .maplibregl-ctrl-geocoder {
+    font-size: 14px;
+  }
 }
